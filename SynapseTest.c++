@@ -1,6 +1,3 @@
-// TODO: Create a single test header for specifying BOOST_TEST_MODULE
-#define BOOST_TEST_MODULE NeuralNetworkTest
-
 #include <boost/test/unit_test.hpp>
 #include "Synapse.h"
 

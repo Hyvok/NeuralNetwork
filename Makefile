@@ -5,7 +5,7 @@ TEST_DEPENDENCIES=-lboost_unit_test_framework -lpthread -lboost_log -DBOOST_LOG_
 LDFLAGS=-v
 TARGET=NeuralNetwork
 SOURCES=Main.c++ Synapse.c++ Neuron.c++ NeuralNetwork.c++
-TEST_SOURCES=SynapseTest.c++ Synapse.c++ Neuron.c++ NeuronTest.c++ NeuralNetworkTest.c++ NeuralNetwork.c++
+TEST_SOURCES=MainTest.c++ SynapseTest.c++ Synapse.c++ Neuron.c++ NeuronTest.c++ NeuralNetworkTest.c++ NeuralNetwork.c++ 
 OBJECTS=$(SOURCES:.c++=.o)
 
 all:

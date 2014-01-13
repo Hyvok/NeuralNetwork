@@ -50,6 +50,7 @@ NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) : neurons(0), co
 
     connections = connectNetwork();
 }
+
 int NeuralNetwork::connectNetwork()
 {
     int nConnections = 0;
@@ -79,6 +80,7 @@ int NeuralNetwork::connectNetwork()
     BOOST_LOG_TRIVIAL(info) << "Connections created: " << nConnections;
     return nConnections;
 }
+
 int NeuralNetwork::updateState()
 {
     int updates = 0;
@@ -93,6 +95,7 @@ int NeuralNetwork::updateState()
 
     return updates;
 }
+
 int NeuralNetwork::getConnections()
 {
     return connections;

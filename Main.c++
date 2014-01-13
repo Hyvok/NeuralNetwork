@@ -3,7 +3,9 @@
 
 int main(int argc, char *argv[])
 {
-	//NeuralNetwork network(3, 1, 2);
-	NeuralNetwork network(1, 1, 1);
+
+    std::vector<int> normal = {3, 2, 1};
+	NeuralNetwork network(normal);
 	return 0;
+
 }
