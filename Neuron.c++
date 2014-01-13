@@ -7,6 +7,7 @@ Neuron::Neuron(int nInputSynapses) : inputSynapses(nInputSynapses), outputSynaps
 
 bool Neuron::updateState()
 {
+
     int sum = 0;
 
     for(auto& synapse: inputSynapses)
@@ -24,4 +25,5 @@ bool Neuron::updateState()
         outputSynapse.value = 0;
         return false;
     }
+
 }

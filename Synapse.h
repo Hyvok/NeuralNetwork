@@ -3,6 +3,7 @@
 
 class Synapse
 {
+
     public:
 
         Synapse();

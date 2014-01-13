@@ -23,11 +23,16 @@ class NeuralNetwork
         std::vector<Neuron>* outputNeurons;
 
     private:
+
+        // Creates the NeuralNetwork, returns number of neurons
+        int createNetwork(std::vector<int> nNeuronsPerLayer);
+
         // Connects network and returns number of connections between neurons
         int connectNetwork();
         std::vector<std::vector<Neuron> > neurons;
 
-        int connections;
+        int _nConnections;
+        int _nNeurons;
 
 };
 

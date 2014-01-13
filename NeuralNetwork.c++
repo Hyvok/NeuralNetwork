@@ -3,17 +3,25 @@
 #include "NeuralNetwork.h"
 #include "Neuron.h"
 
-// TODO: Remove hard-coded amount of layers
-#define LAYERS 3
-
-NeuralNetwork::NeuralNetwork() : inputNeurons(0), outputNeurons(0), connections(0) 
+NeuralNetwork::NeuralNetwork() : inputNeurons(0), outputNeurons(0), _nConnections(0), _nNeurons(0)
 {
+
     inputNeurons = 0;
     outputNeurons = 0;
+
 }
 
-NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) : neurons(0), connections(0)
+NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) : neurons(0), _nConnections(0), _nNeurons(0)
 {
+
+    _nNeurons = createNetwork(nNeuronsPerLayer);
+    _nConnections = connectNetwork();
+
+}
+
+int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer)
+{
+
     int nNeurons = 0;
 
     for(auto& n: nNeuronsPerLayer)
@@ -48,11 +56,13 @@ NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) : neurons(0), co
     BOOST_LOG_TRIVIAL(info) << "Input neurons created: " << this->inputNeurons->size();
     BOOST_LOG_TRIVIAL(info) << "Output neurons created: " << this->outputNeurons->size();
 
-    connections = connectNetwork();
+    return nNeurons;
+
 }
 
 int NeuralNetwork::connectNetwork()
 {
+
     int nConnections = 0;
     int nLayer = 0;
     std::vector<Neuron> prevLayer;
@@ -79,10 +89,12 @@ int NeuralNetwork::connectNetwork()
     }
     BOOST_LOG_TRIVIAL(info) << "Connections created: " << nConnections;
     return nConnections;
+
 }
 
 int NeuralNetwork::updateState()
 {
+
     int updates = 0;
 
     for(auto& layer: neurons)
@@ -98,5 +110,7 @@ int NeuralNetwork::updateState()
 
 int NeuralNetwork::getConnections()
 {
-    return connections;
+
+    return _nConnections;
+
 }
