@@ -15,8 +15,8 @@ class Neuron
         Neuron();
         Neuron(int nInputSynapses);
 
-        // Returns the number of weights updated
-        int updateState();
+        // Returns true if the neuron fires
+        bool updateState();
 
         std::vector<Synapse> inputSynapses;
         Synapse outputSynapse;

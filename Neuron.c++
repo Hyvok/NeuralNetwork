@@ -1,31 +1,27 @@
 #include <vector>
 #include "Neuron.h"
 
-Neuron::Neuron() : inputSynapses(0) {}
+Neuron::Neuron() : inputSynapses(0), outputSynapse() {}
 
-Neuron::Neuron(int nInputSynapses) :
-    inputSynapses(nInputSynapses)
-{}
+Neuron::Neuron(int nInputSynapses) : inputSynapses(nInputSynapses), outputSynapse() {}
 
-int Neuron::updateState()
+bool Neuron::updateState()
 {
     int sum = 0;
-    int updates = 0;
 
-    for(std::vector<Synapse>::iterator iter = inputSynapses.begin(); iter != inputSynapses.end(); ++iter)
+    for(auto& synapse: inputSynapses)
     {
-        sum += (*iter).weight;
+        sum += synapse.weight;
     }
 
     if(sum > THRESHOLD)
     {
         outputSynapse.value = FIRED_NEURON;
-        ++updates;
+        return true;
     }
     else
     {
         outputSynapse.value = 0;
-        ++updates;
+        return false;
     }
-    return updates;
 }

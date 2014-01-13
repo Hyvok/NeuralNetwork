@@ -17,13 +17,18 @@ class NeuralNetwork
         // returns the number of weights updated
         int updateState();
 
-        std::vector<Neuron*> inputNeurons;
-        std::vector<Neuron*> outputNeurons;
+        // Returns number of connections in the network
+        int getConnections();
+
+        std::vector<Neuron>* inputNeurons;
+        std::vector<Neuron>* outputNeurons;
 
     private:
         // Connects network and returns number of connections between neurons
         int connectNetwork();
         std::vector<std::vector<Neuron> > neurons;
+
+        int connections;
 
 };
 
