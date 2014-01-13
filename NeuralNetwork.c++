@@ -11,15 +11,16 @@ NeuralNetwork::NeuralNetwork() : inputNeurons(0), outputNeurons(0), _nConnection
 
 }
 
-NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) : neurons(0), _nConnections(0), _nNeurons(0)
+NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight) : 
+                                    neurons(0), _nConnections(0), _nNeurons(0)
 {
 
-    _nNeurons = createNetwork(nNeuronsPerLayer);
-    _nConnections = connectNetwork();
+    _nNeurons = createNetwork(nNeuronsPerLayer, weight);
+    _nConnections = connectNetwork(weight);
 
 }
 
-int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer)
+int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer, int weight)
 {
 
     int nNeurons = 0;
@@ -43,7 +44,7 @@ int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer)
             }
             else
             {
-                neurons[nLayer].emplace_back(Neuron(nNeuronsPerLayer[nLayer-1]));
+                neurons[nLayer].emplace_back(Neuron(nNeuronsPerLayer[nLayer-1], weight));
             }
         }
     }
@@ -60,7 +61,7 @@ int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer)
 
 }
 
-int NeuralNetwork::connectNetwork()
+int NeuralNetwork::connectNetwork(int weight)
 {
 
     int nConnections = 0;

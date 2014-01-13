@@ -5,6 +5,8 @@ Neuron::Neuron() : inputSynapses(0), outputSynapse() {}
 
 Neuron::Neuron(int nInputSynapses) : inputSynapses(nInputSynapses), outputSynapse() {}
 
+Neuron::Neuron(int nInputSynapses, int weight) : inputSynapses(nInputSynapses, weight), outputSynapse() {}
+
 bool Neuron::updateState()
 {
 

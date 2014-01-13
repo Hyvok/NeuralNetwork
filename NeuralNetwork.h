@@ -10,7 +10,11 @@ class NeuralNetwork
     public:
 
         NeuralNetwork();
-        NeuralNetwork(std::vector<int> nNeuronsPerLayer);
+
+        // Default constructor, nNeuronsPerLayer specifies how many neurons
+        // per layer there is and weight is the default weight for all the 
+        // synapses
+        NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight);
 
         // Calculates the new state of the network, 
         // returns the number of weights updated
@@ -25,10 +29,10 @@ class NeuralNetwork
     private:
 
         // Creates the NeuralNetwork, returns number of neurons
-        int createNetwork(std::vector<int> nNeuronsPerLayer);
+        int createNetwork(std::vector<int> nNeuronsPerLayer,int weight);
 
         // Connects network and returns number of connections between neurons
-        int connectNetwork();
+        int connectNetwork(int weight);
         std::vector<std::vector<Neuron> > neurons;
 
         int _nConnections;

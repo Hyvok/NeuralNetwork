@@ -7,7 +7,11 @@ class Synapse
     public:
 
         Synapse();
+
+        // Constructor for creating a synapse with weight
+        Synapse(int weight);
         Synapse(Synapse*);
+        Synapse(Synapse*, int weight);
 
         int weight;
         int value;

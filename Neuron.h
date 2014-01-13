@@ -14,6 +14,7 @@ class Neuron
 
         Neuron();
         Neuron(int nInputSynapses);
+        Neuron(int nInputSynapses, int weight);
 
         // Returns true if the neuron fires
         bool updateState();
