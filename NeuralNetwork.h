@@ -10,8 +10,7 @@ class NeuralNetwork
     public:
 
         NeuralNetwork();
-        NeuralNetwork(	int nInputNeurons, int nOutputNeurons, 
-                        int nHiddenNeurons);
+        NeuralNetwork(std::vector<int> nNeuronsPerLayer);
 
         // Calculates the new state of the network, 
         // returns the number of weights updated

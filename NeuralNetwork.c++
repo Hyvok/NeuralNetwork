@@ -12,45 +12,39 @@ NeuralNetwork::NeuralNetwork() : inputNeurons(0), outputNeurons(0), connections(
     outputNeurons = 0;
 }
 
-NeuralNetwork::NeuralNetwork(	int nInputNeurons, int nOutputNeurons, 
-                                int nHiddenNeurons) : 
-                                neurons(nInputNeurons+nOutputNeurons+nHiddenNeurons)
+NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) : neurons(0), connections(0)
 {
+    int nNeurons = 0;
 
-        int nNeurons = 0;
+    for(auto& n: nNeuronsPerLayer)
+    {
+        nNeurons += n;
+    }
 
-        for(size_t i = 0; i < LAYERS; ++i)
+    neurons.resize(nNeurons);
+
+    int nLayer = 0;
+
+    for(nLayer = 0; nLayer < nNeuronsPerLayer.size(); ++nLayer)
+    {
+        for(size_t j = 0; j < nNeuronsPerLayer[nLayer]; ++j)
         {
-            switch(i)
+            if(nLayer == 0)
             {
-                case 0:
-                    for(size_t j = 0; j < nInputNeurons; ++j)
-                    {
-                        neurons[i].emplace_back(Neuron(1));
-                        ++nNeurons;
-                    }
-                    break;
-                case 1:
-                    for(size_t j = 0; j < nHiddenNeurons; ++j)
-                    {
-                        neurons[i].emplace_back(Neuron(nInputNeurons));
-                        ++nNeurons;
-                    }
-                    break;
-                case 2:
-                    for(size_t j = 0; j < nOutputNeurons; ++j)
-                    {
-                        neurons[i].emplace_back(Neuron(nHiddenNeurons));	
-                        ++nNeurons;
-                    }
-                    break;
+                neurons[nLayer].emplace_back(Neuron(1));
+            }
+            else
+            {
+                neurons[nLayer].emplace_back(Neuron(nNeuronsPerLayer[nLayer-1]));
             }
         }
-    BOOST_LOG_TRIVIAL(info) << "Layers created: " << LAYERS;
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Layers created: " << nNeuronsPerLayer.size();
     BOOST_LOG_TRIVIAL(info) << "Neurons created: " << nNeurons;
 
     inputNeurons = &neurons[0];
-    outputNeurons = &neurons[LAYERS-1];
+    outputNeurons = &neurons[nNeuronsPerLayer.size()-1];
     BOOST_LOG_TRIVIAL(info) << "Input neurons created: " << this->inputNeurons->size();
     BOOST_LOG_TRIVIAL(info) << "Output neurons created: " << this->outputNeurons->size();
 
