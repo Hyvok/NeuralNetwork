@@ -15,42 +15,30 @@ NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight) :
                                     neurons(0), _nConnections(0), _nNeurons(0)
 {
 
-    _nNeurons = createNetwork(nNeuronsPerLayer, weight);
+    _nNeurons = createNetwork(nNeuronsPerLayer);
     _nConnections = connectNetwork(weight);
 
 }
 
-int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer, int weight)
+int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer)
 {
 
     int nNeurons = 0;
 
-    for(auto& n: nNeuronsPerLayer)
-    {
-        nNeurons += n;
-    }
-
-    neurons.resize(nNeurons);
-
+    neurons.resize(nNeuronsPerLayer.size());
+                    
     int nLayer = 0;
 
     for(nLayer = 0; nLayer < nNeuronsPerLayer.size(); ++nLayer)
     {
         for(size_t j = 0; j < nNeuronsPerLayer[nLayer]; ++j)
         {
-            if(nLayer == 0)
-            {
-                neurons[nLayer].emplace_back(Neuron(1));
-            }
-            else
-            {
-                neurons[nLayer].emplace_back(Neuron(nNeuronsPerLayer[nLayer-1], weight));
-            }
+            neurons[nLayer].emplace_back(Neuron());
         }
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Layers created: " << nNeuronsPerLayer.size();
-    BOOST_LOG_TRIVIAL(info) << "Neurons created: " << nNeurons;
+    BOOST_LOG_TRIVIAL(info) << "Layers created: " << nLayer;
+    BOOST_LOG_TRIVIAL(info) << "Neurons created: " << nNeuronsPerLayer.size();
 
     inputNeurons = &neurons[0];
     outputNeurons = &neurons[nNeuronsPerLayer.size()-1];
@@ -70,25 +58,24 @@ int NeuralNetwork::connectNetwork(int weight)
 
     for(auto& layer: neurons)
     {
-        if(nLayer == 0) 
-        {
-            prevLayer = layer;
-        }
+        if(nLayer == 0) {}
         else
         {
-            for(auto& neuron: layer)
+            for(auto& neuron: prevLayer)
             {
-                for(auto& connectedNeuron: prevLayer)
+                for(auto& connectedNeuron: layer)
                 {
-                    neuron.inputSynapses.push_back(connectedNeuron.outputSynapse);
+                    connectedNeuron.inputSynapses.push_back(Synapse(weight));
+                    neuron.outputSynapse = &connectedNeuron.inputSynapses.back();
                     ++nConnections;
                 }
             }
-            prevLayer = layer;
         }
+        prevLayer = layer;
         ++nLayer;
     }
     BOOST_LOG_TRIVIAL(info) << "Connections created: " << nConnections;
+    BOOST_LOG_TRIVIAL(info) << "Actual layers created: " << nLayer;
     return nConnections;
 
 }
@@ -102,11 +89,12 @@ int NeuralNetwork::updateState()
     {
         for(auto& neuron: layer)
         {
-            updates += neuron.updateState();
+           updates += neuron.updateState();
         }
     }
 
     return updates;
+
 }
 
 int NeuralNetwork::getConnections()

@@ -17,7 +17,7 @@ class NeuralNetwork
         NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight);
 
         // Calculates the new state of the network, 
-        // returns the number of weights updated
+        // returns the number of neurons that have fired
         int updateState();
 
         // Returns number of connections in the network
@@ -29,7 +29,7 @@ class NeuralNetwork
     private:
 
         // Creates the NeuralNetwork, returns number of neurons
-        int createNetwork(std::vector<int> nNeuronsPerLayer,int weight);
+        int createNetwork(std::vector<int> nNeuronsPerLayer);
 
         // Connects network and returns number of connections between neurons
         int connectNetwork(int weight);

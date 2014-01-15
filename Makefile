@@ -13,6 +13,10 @@ all:
 
 test:
 	$(CC) $(TEST_SOURCES) $(CFLAGS) $(TEST_DEPENDENCIES) -o $(TARGET)Test
+# ./NeuralNetworkTest --log_level=message
+
+debug:
+	$(CC) $(SOURCES) $(CFLAGS) -g $(DEPENDENCIES) -o $(TARGET)Debug
 
 clean:
-	rm -rf $(TARGET) $(TARGET)Test
+	rm -rf $(TARGET) $(TARGET)Test $(TARGET)Debug
