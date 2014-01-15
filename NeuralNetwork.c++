@@ -52,13 +52,21 @@ int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer)
 int NeuralNetwork::connectNetwork(int weight)
 {
 
-    int nConnections = 0;
+    int nInputSynapses = 0;
     int nLayer = 0;
+
     std::vector<Neuron> prevLayer;
 
     for(auto& layer: neurons)
     {
-        if(nLayer == 0) {}
+        if(nLayer == 0) 
+        {
+            for(auto& neuron: layer)
+            {
+                neuron.inputSynapses.push_back(Synapse(weight));
+                ++nInputSynapses;
+            }
+        }
         else
         {
             for(auto& neuron: prevLayer)
@@ -67,16 +75,16 @@ int NeuralNetwork::connectNetwork(int weight)
                 {
                     connectedNeuron.inputSynapses.push_back(Synapse(weight));
                     neuron.outputSynapse = &connectedNeuron.inputSynapses.back();
-                    ++nConnections;
+                    ++nInputSynapses;
                 }
             }
         }
         prevLayer = layer;
         ++nLayer;
     }
-    BOOST_LOG_TRIVIAL(info) << "Connections created: " << nConnections;
+    BOOST_LOG_TRIVIAL(info) << "Connections created: " << nInputSynapses;
     BOOST_LOG_TRIVIAL(info) << "Actual layers created: " << nLayer;
-    return nConnections;
+    return nInputSynapses;
 
 }
 
