@@ -4,6 +4,7 @@
 
 BOOST_AUTO_TEST_CASE(neural_network_test)
 {
+
     NeuralNetwork emptyNetwork;
     BOOST_CHECK(emptyNetwork.getConnections() == 0);
     BOOST_CHECK(emptyNetwork.inputNeurons == 0);
@@ -16,6 +17,7 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
     BOOST_CHECK(testNetwork.inputNeurons->size() == 3);
     BOOST_CHECK(testNetwork.outputNeurons->size() == 1);
     BOOST_CHECK(testNetwork.updateState() == 0);
+    testNetwork.getState();
 
     BOOST_TEST_MESSAGE("Testing NeuralNetwork with 1, 1, 1 neurons weight 0...");
     std::vector<int> small = {1, 1, 1};

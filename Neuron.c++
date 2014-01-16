@@ -15,7 +15,6 @@ bool Neuron::updateState()
     }
     for(auto& synapse: inputSynapses)
     {
-        //std::cout << synapse.weight << "\n";
         sum += synapse.weight;
     }
 

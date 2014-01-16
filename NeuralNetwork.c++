@@ -15,12 +15,12 @@ NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight) :
                                     neurons(0), _nConnections(0), _nNeurons(0)
 {
 
-    _nNeurons = createNetwork(nNeuronsPerLayer);
+    _nNeurons = createNeurons(nNeuronsPerLayer);
     _nConnections = connectNetwork(weight);
 
 }
 
-int NeuralNetwork::createNetwork(std::vector<int> nNeuronsPerLayer)
+int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
 {
 
     int nNeurons = 0;
@@ -109,5 +109,41 @@ int NeuralNetwork::getConnections()
 {
 
     return _nConnections;
+
+}
+
+std::vector<std::vector<std::vector<int> > > NeuralNetwork::getState()
+{
+
+    std::vector<std::vector<std::vector<int> > > state(neurons.size());
+
+    int nLayer = 0;
+    int nNeuron = 0;
+    int nSynapse = 0;
+
+    for(auto& layer: neurons)
+    {
+        BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
+
+        std::vector<std::vector<int > > lol;
+        state.push_back(lol);
+
+        for(auto& neuron: layer)
+        {
+            BOOST_LOG_TRIVIAL(info) << "Neuron: " << nNeuron;
+            std::vector<int> kek;
+            state.back().push_back(kek);
+            for(auto& synapse: neuron.inputSynapses)
+            {
+                BOOST_LOG_TRIVIAL(info) << "Weight: " << synapse.weight;
+                state.back().back().push_back(synapse.weight);
+                ++nSynapse;
+            }
+            ++nNeuron;
+        }
+        ++nLayer;
+    }
+
+    return state;
 
 }

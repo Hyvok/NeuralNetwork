@@ -3,6 +3,7 @@
 
 BOOST_AUTO_TEST_CASE(synapse_test)
 {
+
     Synapse testSynapse;
 
     BOOST_CHECK(testSynapse.weight == 0);

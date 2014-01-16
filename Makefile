@@ -1,4 +1,4 @@
-CC=clang++
+CC=g++
 CFLAGS=-Wall -std=c++11 
 DEPENDENCIES=-lpthread -lboost_log -DBOOST_LOG_DYN_LINK
 TEST_DEPENDENCIES=-lboost_unit_test_framework -lpthread -lboost_log -DBOOST_LOG_DYN_LINK -DBOOST_TEST_DYN_LINK

@@ -23,13 +23,16 @@ class NeuralNetwork
         // Returns number of connections in the network
         int getConnections();
 
+        // Returns weights of the synapses in the network
+        std::vector<std::vector<std::vector<int> > > getState();
+
         std::vector<Neuron>* inputNeurons;
         std::vector<Neuron>* outputNeurons;
 
     private:
 
-        // Creates the NeuralNetwork, returns number of neurons
-        int createNetwork(std::vector<int> nNeuronsPerLayer);
+        // Creates the neurons, returns number of neurons
+        int createNeurons(std::vector<int> nNeuronsPerLayer);
 
         // Connects network and returns number of connections
         int connectNetwork(int weight);
