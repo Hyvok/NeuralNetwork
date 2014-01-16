@@ -24,7 +24,7 @@ class NeuralNetwork
         int getConnections();
 
         // Returns weights of the synapses in the network
-        std::vector<std::vector<std::vector<int> > > getState();
+        std::vector<std::vector<std::vector<int> > > getWeights();
 
         std::vector<Neuron>* inputNeurons;
         std::vector<Neuron>* outputNeurons;

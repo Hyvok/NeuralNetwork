@@ -17,7 +17,16 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
     BOOST_CHECK(testNetwork.inputNeurons->size() == 3);
     BOOST_CHECK(testNetwork.outputNeurons->size() == 1);
     BOOST_CHECK(testNetwork.updateState() == 0);
-    testNetwork.getState();
+    testNetwork.getWeights();
+
+    BOOST_TEST_MESSAGE("Testing NeuralNetwork with 3, 2, 1 neurons weight 1000...");
+    std::vector<int> normal_thousand = {3, 2, 1};
+    NeuralNetwork testNetworkThousand(normal_thousand, 1000);
+    BOOST_CHECK(testNetworkThousand.getConnections() == 11);
+    BOOST_CHECK(testNetworkThousand.inputNeurons->size() == 3);
+    BOOST_CHECK(testNetworkThousand.outputNeurons->size() == 1);
+    BOOST_CHECK(testNetworkThousand.updateState() == 6);
+    testNetworkThousand.getWeights();
 
     BOOST_TEST_MESSAGE("Testing NeuralNetwork with 1, 1, 1 neurons weight 0...");
     std::vector<int> small = {1, 1, 1};
@@ -40,6 +49,6 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
     BOOST_CHECK(testNetworkBigTwo.getConnections() == 55);
     BOOST_CHECK(testNetworkBigTwo.inputNeurons->size() == 5);
     BOOST_CHECK(testNetworkBigTwo.outputNeurons->size() == 5);
-    BOOST_CHECK(testNetworkBigTwo.updateState() == 10);
+    BOOST_CHECK(testNetworkBigTwo.updateState() == 15);
 
 }

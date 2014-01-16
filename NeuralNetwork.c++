@@ -112,7 +112,7 @@ int NeuralNetwork::getConnections()
 
 }
 
-std::vector<std::vector<std::vector<int> > > NeuralNetwork::getState()
+std::vector<std::vector<std::vector<int> > > NeuralNetwork::getWeights()
 {
 
     std::vector<std::vector<std::vector<int> > > state(neurons.size());
@@ -125,17 +125,17 @@ std::vector<std::vector<std::vector<int> > > NeuralNetwork::getState()
     {
         BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
 
-        std::vector<std::vector<int > > lol;
-        state.push_back(lol);
+        std::vector<std::vector<int > > layer_temp;
+        state.push_back(layer_temp);
 
         for(auto& neuron: layer)
         {
-            BOOST_LOG_TRIVIAL(info) << "Neuron: " << nNeuron;
-            std::vector<int> kek;
-            state.back().push_back(kek);
+            BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << nNeuron;
+            std::vector<int> neuron_temp;
+            state.back().push_back(neuron_temp);
             for(auto& synapse: neuron.inputSynapses)
             {
-                BOOST_LOG_TRIVIAL(info) << "Weight: " << synapse.weight;
+                BOOST_LOG_TRIVIAL(info) << "\t\tWeight: " << synapse.weight;
                 state.back().back().push_back(synapse.weight);
                 ++nSynapse;
             }

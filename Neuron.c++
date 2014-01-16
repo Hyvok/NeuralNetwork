@@ -18,7 +18,7 @@ bool Neuron::updateState()
         sum += synapse.weight;
     }
 
-    if(sum > THRESHOLD)
+    if(sum >= THRESHOLD)
     {
         if(outputSynapse != 0) 
         {
