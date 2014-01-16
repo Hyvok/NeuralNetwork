@@ -73,8 +73,11 @@ int NeuralNetwork::connectNetwork(int weight)
             {
                 for(auto& connectedNeuron: layer)
                 {
+                    // TODO pushing back the inputSynapses breaks the outputSynapse
+                    // pointers, FIX
                     connectedNeuron.inputSynapses.push_back(Synapse(weight));
                     neuron.outputSynapse = &connectedNeuron.inputSynapses.back();
+                    //BOOST_LOG_TRIVIAL(info) << "Debug value: " << &neuron.outputSynapse;
                     ++nInputSynapses;
                 }
             }
@@ -139,6 +142,41 @@ std::vector<std::vector<std::vector<int> > > NeuralNetwork::getWeights()
                 state.back().back().push_back(synapse.weight);
                 ++nSynapse;
             }
+            ++nNeuron;
+        }
+        ++nLayer;
+    }
+
+    return state;
+
+}
+
+std::vector<std::vector<int> > NeuralNetwork::getState()
+{
+
+    std::vector<std::vector<int> > state(neurons.size());
+
+    int nLayer = 0;
+    int nNeuron = 0;
+    int nSynapse = 0;
+
+    for(auto& layer: neurons)
+    {
+        BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
+
+        std::vector<int> layer_temp;
+        state.push_back(layer_temp);
+
+        for(auto& neuron: layer)
+        {
+            //BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << nNeuron;
+            //BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << neuron.outputSynapse->value;
+            if(neuron.outputSynapse != nullptr)
+            {
+                BOOST_LOG_TRIVIAL(info) << "\t\tState: " << neuron.outputSynapse->value;
+                state.back().push_back(neuron.outputSynapse->value);
+            }
+            ++nSynapse;
             ++nNeuron;
         }
         ++nLayer;
