@@ -15,7 +15,7 @@ bool Neuron::updateState()
     }
     for(auto& synapse: inputSynapses)
     {
-        sum += synapse.weight;
+        sum += synapse.weight * synapse.value;
     }
 
     if(sum >= THRESHOLD)

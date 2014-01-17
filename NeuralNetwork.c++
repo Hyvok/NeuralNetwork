@@ -33,12 +33,13 @@ int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
     {
         for(size_t j = 0; j < nNeuronsPerLayer[nLayer]; ++j)
         {
-            neurons[nLayer].emplace_back(Neuron());
+            neurons[nLayer].emplace_back();
+            ++nNeurons;
         }
     }
 
     BOOST_LOG_TRIVIAL(info) << "Layers created: " << nLayer;
-    BOOST_LOG_TRIVIAL(info) << "Neurons created: " << nNeuronsPerLayer.size();
+    BOOST_LOG_TRIVIAL(info) << "Neurons created: " << nNeurons;
 
     inputNeurons = &neurons[0];
     outputNeurons = &neurons[nNeuronsPerLayer.size()-1];
@@ -55,7 +56,7 @@ int NeuralNetwork::connectNetwork(int weight)
     int nInputSynapses = 0;
     int nLayer = 0;
 
-    std::vector<Neuron> prevLayer;
+    std::vector<Neuron>* prevLayer;
 
     for(auto& layer: neurons)
     {
@@ -72,13 +73,14 @@ int NeuralNetwork::connectNetwork(int weight)
         {
             for(auto& neuron: layer)
             {
-                for(auto& prevNeuron: prevLayer)
+                for(auto& prevNeuron: *prevLayer)
                 {
                     neuron.inputSynapses.push_back(Synapse(weight));
+                    ++nInputSynapses;
                 }
             }
         }
-        prevLayer = layer;
+        prevLayer = &layer;
         ++nLayer;
     }
 
@@ -90,19 +92,18 @@ int NeuralNetwork::connectNetwork(int weight)
         if(nLayer == 0) {}
         else
         {
-            for(auto& neuron: prevLayer)
+            for(auto& neuron: *prevLayer)
             {
                 for(auto& connectedNeuron: layer)
                 {
                     // Connect first neuron from prevLayer to inputSynapse 0 etc.
                     neuron.outputSynapse = &connectedNeuron.inputSynapses[nSynapse];
-                    ++nSynapse;
-                    ++nInputSynapses;
                 }
-                nSynapse = 0;
+                ++nSynapse;
             }
         }
-        prevLayer = layer;
+        nSynapse = 0;
+        prevLayer = &layer;
         ++nLayer;
     }
 
@@ -190,8 +191,6 @@ std::vector<std::vector<int> > NeuralNetwork::getState()
 
         for(auto& neuron: layer)
         {
-            // TODO: neuron.outputSynapse pointer is broken
-            //BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << neuron.outputSynapse->value;
             if(neuron.outputSynapse != nullptr)
             {
                 BOOST_LOG_TRIVIAL(info) << "\t\tState: " << neuron.outputSynapse->value;
