@@ -29,8 +29,18 @@ class NeuralNetwork
         // Returns states of the output synapses in the network
         std::vector<std::vector<int> > getState();
 
-        std::vector<Neuron>* inputNeurons;
-        std::vector<Neuron>* outputNeurons;
+        // Give input to the network, returns true if it is accepted
+        bool setInput(std::vector<int> input);
+
+        // Get number of input neurons
+        int getInputSize();
+
+        // Get number of output neurons
+        int getOutputSize();
+
+        // Get output from the network
+        std::vector<int> getOutput(std::vector<int> output);
+
 
     private:
 
@@ -39,7 +49,10 @@ class NeuralNetwork
 
         // Connects network and returns number of connections
         int connectNetwork(int weight);
-        std::vector<std::vector<Neuron> > neurons;
+
+        std::vector<std::vector<Neuron> > _neurons;
+        std::vector<Neuron>* _inputNeurons;
+        std::vector<Neuron>* _outputNeurons;
 
         int _nConnections;
         int _nNeurons;

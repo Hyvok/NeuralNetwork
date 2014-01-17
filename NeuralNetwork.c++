@@ -3,16 +3,16 @@
 #include "NeuralNetwork.h"
 #include "Neuron.h"
 
-NeuralNetwork::NeuralNetwork() : inputNeurons(0), outputNeurons(0), _nConnections(0), _nNeurons(0)
+NeuralNetwork::NeuralNetwork() : _inputNeurons(0), _outputNeurons(0), _nConnections(0), _nNeurons(0)
 {
 
-    inputNeurons = 0;
-    outputNeurons = 0;
+    _inputNeurons = 0;
+    _outputNeurons = 0;
 
 }
 
 NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight) : 
-                                    neurons(0), _nConnections(0), _nNeurons(0)
+                                    _neurons(0), _nConnections(0), _nNeurons(0)
 {
 
     _nNeurons = createNeurons(nNeuronsPerLayer);
@@ -25,7 +25,7 @@ int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
 
     int nNeurons = 0;
 
-    neurons.resize(nNeuronsPerLayer.size());
+    _neurons.resize(nNeuronsPerLayer.size());
                     
     int nLayer = 0;
 
@@ -33,7 +33,7 @@ int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
     {
         for(size_t j = 0; j < nNeuronsPerLayer[nLayer]; ++j)
         {
-            neurons[nLayer].emplace_back();
+            _neurons[nLayer].emplace_back();
             ++nNeurons;
         }
     }
@@ -41,10 +41,10 @@ int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
     BOOST_LOG_TRIVIAL(info) << "Layers created: " << nLayer;
     BOOST_LOG_TRIVIAL(info) << "Neurons created: " << nNeurons;
 
-    inputNeurons = &neurons[0];
-    outputNeurons = &neurons[nNeuronsPerLayer.size()-1];
-    BOOST_LOG_TRIVIAL(info) << "Input neurons created: " << this->inputNeurons->size();
-    BOOST_LOG_TRIVIAL(info) << "Output neurons created: " << this->outputNeurons->size();
+    _inputNeurons = &_neurons[0];
+    _outputNeurons = &_neurons[nNeuronsPerLayer.size()-1];
+    BOOST_LOG_TRIVIAL(info) << "Input neurons created: " << this->_inputNeurons->size();
+    BOOST_LOG_TRIVIAL(info) << "Output neurons created: " << this->_outputNeurons->size();
 
     return nNeurons;
 
@@ -58,7 +58,7 @@ int NeuralNetwork::connectNetwork(int weight)
 
     std::vector<Neuron>* prevLayer;
 
-    for(auto& layer: neurons)
+    for(auto& layer: _neurons)
     {
         if(nLayer == 0) 
         {
@@ -87,7 +87,7 @@ int NeuralNetwork::connectNetwork(int weight)
     int nSynapse = 0;
     nLayer = 0;
 
-    for(auto& layer: neurons)
+    for(auto& layer: _neurons)
     {
         if(nLayer == 0) {}
         else
@@ -118,7 +118,7 @@ int NeuralNetwork::updateState()
 
     int updates = 0;
 
-    for(auto& layer: neurons)
+    for(auto& layer: _neurons)
     {
         for(auto& neuron: layer)
         {
@@ -140,13 +140,13 @@ int NeuralNetwork::getConnections()
 std::vector<std::vector<std::vector<int> > > NeuralNetwork::getWeights()
 {
 
-    std::vector<std::vector<std::vector<int> > > state(neurons.size());
+    std::vector<std::vector<std::vector<int> > > state(_neurons.size());
 
     int nLayer = 0;
     int nNeuron = 0;
     int nSynapse = 0;
 
-    for(auto& layer: neurons)
+    for(auto& layer: _neurons)
     {
         BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
 
@@ -176,13 +176,13 @@ std::vector<std::vector<std::vector<int> > > NeuralNetwork::getWeights()
 std::vector<std::vector<int> > NeuralNetwork::getState()
 {
 
-    std::vector<std::vector<int> > state(neurons.size());
+    std::vector<std::vector<int> > state(_neurons.size());
 
     int nLayer = 0;
     int nNeuron = 0;
     int nSynapse = 0;
 
-    for(auto& layer: neurons)
+    for(auto& layer: _neurons)
     {
         BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
 
@@ -203,5 +203,69 @@ std::vector<std::vector<int> > NeuralNetwork::getState()
     }
 
     return state;
+
+}
+
+bool NeuralNetwork::setInput(std::vector<int> input)
+{
+
+    if(input.size() != _inputNeurons->size())
+    {
+        return false;
+    }
+
+    int nNeuron = 0;
+
+    for(auto& neuron: *_inputNeurons)
+    {
+        neuron.inputSynapses.front().value = input[nNeuron];
+        ++nNeuron;
+    }
+
+    return true;
+
+}
+
+std::vector<int> NeuralNetwork::getOutput(std::vector<int> output)
+{
+
+    std::vector<int> result(_outputNeurons->size());
+    int nNeuron = 0;
+
+    for(auto& neuron: *_outputNeurons)
+    {
+        result[nNeuron] = neuron.outputSynapse->value;
+        ++nNeuron;
+    }
+
+    return result;
+
+}
+
+int NeuralNetwork::getInputSize()
+{
+    
+    if(_inputNeurons == nullptr)
+    {
+        return 0;
+    }
+    else
+    {
+        return _inputNeurons->size();
+    }
+
+}
+
+int NeuralNetwork::getOutputSize()
+{
+    
+    if(_outputNeurons == nullptr)
+    {
+        return 0;
+    }
+    else
+    {
+        return _outputNeurons->size();
+    }
 
 }
