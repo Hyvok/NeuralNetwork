@@ -62,10 +62,9 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
     BOOST_CHECK(testNetwork.updateState() == 0);
 
     BOOST_TEST_MESSAGE("Testing NeuralNetwork with 3, 2, 1 neurons weight 1000, input 1, 0, 0...");
-    testNetwork.getState();
+    BOOST_CHECK(testNetwork.getOutput()[0] == 0);
     BOOST_CHECK(testNetwork.setInput({1, 0, 0}) == true);
-    //testNetwork.inputNeurons->front().inputSynapses.front().value = 1;
     BOOST_CHECK(testNetwork.updateState() == 3);
-    testNetwork.getState();
+    BOOST_CHECK(testNetwork.getOutput()[0] == 1);
 
 }

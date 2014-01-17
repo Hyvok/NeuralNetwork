@@ -39,7 +39,7 @@ class NeuralNetwork
         int getOutputSize();
 
         // Get output from the network
-        std::vector<int> getOutput(std::vector<int> output);
+        std::vector<int> getOutput();
 
 
     private:
@@ -53,6 +53,7 @@ class NeuralNetwork
         std::vector<std::vector<Neuron> > _neurons;
         std::vector<Neuron>* _inputNeurons;
         std::vector<Neuron>* _outputNeurons;
+        std::vector<Synapse> _outputSynapses;
 
         int _nConnections;
         int _nNeurons;

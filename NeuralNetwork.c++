@@ -3,7 +3,7 @@
 #include "NeuralNetwork.h"
 #include "Neuron.h"
 
-NeuralNetwork::NeuralNetwork() : _inputNeurons(0), _outputNeurons(0), _nConnections(0), _nNeurons(0)
+NeuralNetwork::NeuralNetwork() : _inputNeurons(0), _outputNeurons(0), _outputSynapses(0), _nConnections(0), _nNeurons(0) 
 {
 
     _inputNeurons = 0;
@@ -12,7 +12,8 @@ NeuralNetwork::NeuralNetwork() : _inputNeurons(0), _outputNeurons(0), _nConnecti
 }
 
 NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight) : 
-                                    _neurons(0), _nConnections(0), _nNeurons(0)
+                                    _neurons(0), _outputSynapses(0), _nConnections(0), _nNeurons(0)
+
 {
 
     _nNeurons = createNeurons(nNeuronsPerLayer);
@@ -87,6 +88,8 @@ int NeuralNetwork::connectNetwork(int weight)
     int nSynapse = 0;
     nLayer = 0;
 
+    _outputSynapses.resize(_outputNeurons->size());
+
     for(auto& layer: _neurons)
     {
         if(nLayer == 0) {}
@@ -101,10 +104,18 @@ int NeuralNetwork::connectNetwork(int weight)
                 }
                 ++nSynapse;
             }
-        }
+        }  
         nSynapse = 0;
         prevLayer = &layer;
         ++nLayer;
+    }
+
+    int nNeuron = 0;
+
+    for(auto& neuron: *_outputNeurons)
+    {
+        neuron.outputSynapse = &_outputSynapses[nNeuron];
+        ++nNeuron;
     }
 
     BOOST_LOG_TRIVIAL(info) << "Connections created: " << nInputSynapses;
@@ -226,16 +237,16 @@ bool NeuralNetwork::setInput(std::vector<int> input)
 
 }
 
-std::vector<int> NeuralNetwork::getOutput(std::vector<int> output)
+std::vector<int> NeuralNetwork::getOutput()
 {
 
-    std::vector<int> result(_outputNeurons->size());
-    int nNeuron = 0;
+    std::vector<int> result(_outputSynapses.size());
+    int nSynapse = 0;
 
-    for(auto& neuron: *_outputNeurons)
+    for(auto& synapse: _outputSynapses)
     {
-        result[nNeuron] = neuron.outputSynapse->value;
-        ++nNeuron;
+        result[nSynapse] = synapse.value;
+        ++nSynapse;
     }
 
     return result;
