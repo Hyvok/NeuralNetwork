@@ -61,6 +61,7 @@ int NeuralNetwork::connectNetwork(int weight)
     {
         if(nLayer == 0) 
         {
+            // Create input synapses which are not connected to anything
             for(auto& neuron: layer)
             {
                 neuron.inputSynapses.push_back(Synapse(weight));
@@ -69,22 +70,42 @@ int NeuralNetwork::connectNetwork(int weight)
         }
         else
         {
-            for(auto& neuron: prevLayer)
+            for(auto& neuron: layer)
             {
-                for(auto& connectedNeuron: layer)
+                for(auto& prevNeuron: prevLayer)
                 {
-                    // TODO pushing back the inputSynapses breaks the outputSynapse
-                    // pointers, FIX
-                    connectedNeuron.inputSynapses.push_back(Synapse(weight));
-                    neuron.outputSynapse = &connectedNeuron.inputSynapses.back();
-                    //BOOST_LOG_TRIVIAL(info) << "Debug value: " << &neuron.outputSynapse;
-                    ++nInputSynapses;
+                    neuron.inputSynapses.push_back(Synapse(weight));
                 }
             }
         }
         prevLayer = layer;
         ++nLayer;
     }
+
+    int nSynapse = 0;
+    nLayer = 0;
+
+    for(auto& layer: neurons)
+    {
+        if(nLayer == 0) {}
+        else
+        {
+            for(auto& neuron: prevLayer)
+            {
+                for(auto& connectedNeuron: layer)
+                {
+                    // Connect first neuron from prevLayer to inputSynapse 0 etc.
+                    neuron.outputSynapse = &connectedNeuron.inputSynapses[nSynapse];
+                    ++nSynapse;
+                    ++nInputSynapses;
+                }
+                nSynapse = 0;
+            }
+        }
+        prevLayer = layer;
+        ++nLayer;
+    }
+
     BOOST_LOG_TRIVIAL(info) << "Connections created: " << nInputSynapses;
     BOOST_LOG_TRIVIAL(info) << "Actual layers created: " << nLayer;
     return nInputSynapses;
@@ -169,7 +190,7 @@ std::vector<std::vector<int> > NeuralNetwork::getState()
 
         for(auto& neuron: layer)
         {
-            //BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << nNeuron;
+            // TODO: neuron.outputSynapse pointer is broken
             //BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << neuron.outputSynapse->value;
             if(neuron.outputSynapse != nullptr)
             {
