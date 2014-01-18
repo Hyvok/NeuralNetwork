@@ -17,7 +17,7 @@ class NeuralNetwork
         NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight);
 
         // Calculates the new state of the network, 
-        // returns the number of neurons that have fired
+        // returns the total amount of change in output synapses
         int updateState();
 
         // Returns number of connections in the network
@@ -25,6 +25,9 @@ class NeuralNetwork
 
         // Returns weights of the synapses in the network
         std::vector<std::vector<std::vector<int> > > getWeights();
+
+        // Returns input values of the synapses in the network
+        std::vector<std::vector<std::vector<int> > > getValues();
 
         // Returns states of the output synapses in the network
         std::vector<std::vector<int> > getState();
@@ -53,7 +56,9 @@ class NeuralNetwork
         std::vector<std::vector<Neuron> > _neurons;
         std::vector<Neuron>* _inputNeurons;
         std::vector<Neuron>* _outputNeurons;
-        std::vector<Synapse> _outputSynapses;
+    
+        std::vector<int> _inputValues;
+        std::vector<int*> _outputValues;
 
         int _nConnections;
         int _nNeurons;

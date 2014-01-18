@@ -2,10 +2,8 @@
 #define NEURON_H
 
 #include <vector>
-#include "Synapse.h"
-
-#define FIRED_NEURON 1
-#define THRESHOLD 1000
+#include "InputSynapse.h"
+#include "OutputSynapse.h"
 
 class Neuron
 {
@@ -15,10 +13,10 @@ class Neuron
         Neuron();
 
         // Returns true if the neuron fires
-        bool updateState();
+        int updateState();
 
-        std::vector<Synapse> inputSynapses;
-        Synapse* outputSynapse;
+        std::vector<InputSynapse> inputSynapses;
+        OutputSynapse outputSynapse;
 
 };
 

@@ -46,25 +46,36 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
             }
         }
 
+        BOOST_TEST_MESSAGE("JYHYY");
         BOOST_CHECK(testNetwork.getConnections() == nConnections);
+        BOOST_TEST_MESSAGE("JYHYY");
         BOOST_CHECK(testNetwork.getInputSize() == zero_weight[nTest][0]);
+        BOOST_TEST_MESSAGE("JYHYY");
         BOOST_CHECK(testNetwork.getOutputSize() == zero_weight[nTest].back());
+        BOOST_TEST_MESSAGE("JYHYY");
         BOOST_CHECK(testNetwork.updateState() == 0);
+        BOOST_TEST_MESSAGE("JYHYY");
 
     }
 
-    BOOST_TEST_MESSAGE("Testing NeuralNetwork with 3, 2, 1 neurons weight 1000, input 0, 0, 0...");
+    BOOST_TEST_MESSAGE("Testing NeuralNetwork with 3, 2, 1 neurons weight 1, input 0, 0, 0...");
     std::vector<int> normal_thousand = {3, 2, 1};
-    NeuralNetwork testNetwork(normal_thousand, 1000);
+    NeuralNetwork testNetwork(normal_thousand, 1);
     BOOST_CHECK(testNetwork.getConnections() == 11);
     BOOST_CHECK(testNetwork.getInputSize() == 3);
     BOOST_CHECK(testNetwork.getOutputSize() == 1);
     BOOST_CHECK(testNetwork.updateState() == 0);
+    testNetwork.updateState();
 
-    BOOST_TEST_MESSAGE("Testing NeuralNetwork with 3, 2, 1 neurons weight 1000, input 1, 0, 0...");
+    BOOST_TEST_MESSAGE("Testing NeuralNetwork with 3, 2, 1 neurons weight 1, input 1, 0, 0...");
     BOOST_CHECK(testNetwork.getOutput()[0] == 0);
     BOOST_CHECK(testNetwork.setInput({1, 0, 0}) == true);
-    BOOST_CHECK(testNetwork.updateState() == 3);
-    BOOST_CHECK(testNetwork.getOutput()[0] == 1);
+    //BOOST_CHECK(testNetwork.updateState() == 3);
+    testNetwork.getValues();
+    std::cout << "testNetwork.updateState(): " << testNetwork.updateState() << "\n";
+    testNetwork.getValues();
+    //testNetwork.updateState();
+    std::cout << "testNetwork.getOutput(): " << testNetwork.getOutput()[0] << "\n";
+    //BOOST_CHECK(testNetwork.getOutput()[0] == 1);
 
 }
