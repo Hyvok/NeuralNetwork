@@ -1,5 +1,8 @@
 #include <iostream>
 #include <boost/log/trivial.hpp>
+// rand()
+#include <stdlib.h>
+#include <time.h>
 #include "NeuralNetwork.h"
 #include "Neuron.h"
 
@@ -62,6 +65,12 @@ int NeuralNetwork::connectNetwork(int weight)
 
     int nInputSynapses = 0;
     int nLayer = 0;
+    int weight_ = weight;
+
+    if(weight == 0)
+    {
+        srand(time(NULL));
+    }
 
     std::vector<Neuron>* prevLayer;
 
@@ -72,7 +81,11 @@ int NeuralNetwork::connectNetwork(int weight)
             // Create input synapses to the first layer
             for(auto& neuron: layer)
             {
-                neuron.inputSynapses.push_back(InputSynapse(weight));
+                if(weight == 0)
+                {
+                    weight_ = rand() % MAX_RANDOM_WEIGHT;
+                }
+                neuron.inputSynapses.push_back(InputSynapse(weight_));
                 ++nInputSynapses;
             }
         }
@@ -84,7 +97,11 @@ int NeuralNetwork::connectNetwork(int weight)
                 // as there are neurons in the previous layer
                 for(auto& prevNeuron: *prevLayer)
                 {
-                    neuron.inputSynapses.push_back(InputSynapse(weight));
+                    if(weight == 0)
+                    {
+                        weight_ = rand() % MAX_RANDOM_WEIGHT;
+                    }
+                    neuron.inputSynapses.push_back(InputSynapse(weight_));
                     ++nInputSynapses;
                 }
             }

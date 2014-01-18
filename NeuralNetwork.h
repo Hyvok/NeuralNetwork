@@ -4,6 +4,8 @@
 #include <vector>
 #include "Neuron.h"
 
+#define MAX_RANDOM_WEIGHT 10
+
 class NeuralNetwork
 {
 
@@ -13,7 +15,8 @@ class NeuralNetwork
 
         // Default constructor, nNeuronsPerLayer specifies how many neurons
         // per layer there is and weight is the default weight for all the 
-        // synapses
+        // synapses. If weight is 0 then the weights will be randomly chosen
+        // between 0 and MAX_RANDOM_WEIGHT
         NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight);
 
         // Calculates the new state of the network, 
