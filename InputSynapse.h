@@ -8,7 +8,7 @@ class InputSynapse
 
         InputSynapse();
 
-        // Constructor for creating a synapse with weight
+        // Constructor for creating an InputSynapse with weight
         InputSynapse(int weight);
 
         int weight;

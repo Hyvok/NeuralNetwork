@@ -14,6 +14,7 @@ int Neuron::updateState()
     {
         return 0;
     }
+
     for(auto& synapse: inputSynapses)
     {
         sum += synapse.weight * (*synapse.value);
@@ -23,4 +24,5 @@ int Neuron::updateState()
     outputSynapse.value = sum;
 
     return difference;
+
 }

@@ -53,15 +53,15 @@ class NeuralNetwork
         // Connects network and returns number of connections
         int connectNetwork(int weight);
 
-        std::vector<std::vector<Neuron> > _neurons;
-        std::vector<Neuron>* _inputNeurons;
-        std::vector<Neuron>* _outputNeurons;
+        std::vector<std::vector<Neuron> > neurons_;
+        std::vector<Neuron>* inputNeurons_;
+        std::vector<Neuron>* outputNeurons_;
     
-        std::vector<int> _inputValues;
-        std::vector<int*> _outputValues;
+        std::vector<int> inputValues_;
+        std::vector<int*> outputValues_;
 
-        int _nConnections;
-        int _nNeurons;
+        int nConnections_;
+        int nNeurons_;
 
 };
 
