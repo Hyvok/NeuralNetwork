@@ -73,5 +73,10 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
     BOOST_CHECK(testNetwork.setInput({1, 0, 0}) == true);
     BOOST_CHECK(testNetwork.updateState() == 5.0);
     BOOST_CHECK(testNetwork.getOutput()[0] == 2.0);
+    testNetwork.getState();
+    for(auto& neuron: testNetwork)
+    {
+        std::cout << "Neuron value: " << neuron.outputSynapse.value << "\n";
+    }
 
 }

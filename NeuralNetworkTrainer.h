@@ -27,15 +27,6 @@ class NeuralNetworkTrainer
         NeuralNetworkTrainer(   NeuralNetwork network, std::vector<int> input,
                                 std::vector<int> output);
 
-        // Constructor for constructing a NeuralNetworkTrainer to train 
-        // network with input and adjust networks weights based on
-        // difference between input and desired output using the function
-        // scoreResult() to evaluate the output
-        NeuralNetworkTrainer(   NeuralNetwork network, std::vector<int> input,
-                                std::vector<int> output, 
-                                int (*scoreResult)(std::vector<int> input,
-                                std::vector<int> output));
-
         // Do one iteration of training the network
         trainNetwork();
 

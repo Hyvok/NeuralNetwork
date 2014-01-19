@@ -2,12 +2,15 @@
 #define NEURAL_NETWORK_H
 
 #include <vector>
+#include <iterator>
 #include "Neuron.h"
 
 #define MAX_RANDOM_WEIGHT 10
 
 class NeuralNetwork
 {
+
+    friend class iterator;
 
     public:
 
@@ -47,6 +50,32 @@ class NeuralNetwork
         // Get output from the network
         std::vector<float> getOutput();
 
+        // Iterators so you can iterate over all the neurons
+        class iterator
+        {
+
+            public:
+
+                typedef std::forward_iterator_tag iterator_category;
+                //typedef int difference_type;
+                iterator(Neuron* ptr, NeuralNetwork& owner);
+                NeuralNetwork::iterator operator++();
+                Neuron& operator*();
+                bool operator!=(const NeuralNetwork::iterator& rhs);
+                //pointer operator->();
+                //bool operator==(const self_type& rhs) { return ptr_ == rhs.ptr_; }
+                //bool operator!=(const self_type& rhs) { return ptr_ != rhs.ptr_; }
+
+            private:
+                
+                NeuralNetwork& owner_;
+                std::vector<Neuron>* layer_;
+                Neuron* neuron_;
+
+        };
+
+        iterator begin();
+        iterator end();
 
     private:
 

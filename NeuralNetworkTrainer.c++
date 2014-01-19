@@ -20,17 +20,6 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork network,
                                             network_(network), input_(input),
                                             output_(output), nTrainings_(0) {}
 
-NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork network, 
-                                            std::vector<int> input,
-                                            std::vector<int> output, 
-                                            int (*scoreResult)
-                                                (std::vector<int> input,
-                                                std::vector<int> output)) : 
-                                            network_(network), 
-                                            scoreResult_(scoreResult),
-                                            input_(input), output_(output), 
-                                            nTrainings_(0) {}
-
 NeuralNetworkTrainer::trainNetwork()
 {
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include <boost/log/trivial.hpp>
 // rand()
 #include <stdlib.h>
@@ -353,5 +354,77 @@ int NeuralNetwork::getOutputSize()
     {
         return outputNeurons_->size();
     }
+
+}
+
+NeuralNetwork::iterator NeuralNetwork::begin()
+{
+
+    return iterator(&(neurons_.front().front()), *this);
+    //return (*inputNeurons_).begin();
+
+}
+
+NeuralNetwork::iterator NeuralNetwork::end()
+{
+
+    return iterator(&(*(neurons_.back().end())), *this);
+    //return (*outputNeurons_).end();
+
+}
+
+NeuralNetwork::iterator::iterator(  Neuron* ptr, NeuralNetwork& owner) : 
+                                    owner_(owner), layer_(0), neuron_(ptr) 
+{
+
+    // Figure out in which layer we are and store it
+    for(auto& layer: owner.neurons_)
+    {
+        for(auto& neuron: layer)
+        {
+            if(neuron_ == &neuron)
+            {
+                layer_ = &layer;
+            }
+        }
+    }
+
+}
+
+Neuron& NeuralNetwork::iterator::operator*()
+{
+
+    return *neuron_;
+
+}
+
+bool NeuralNetwork::iterator::operator!=(const NeuralNetwork::iterator& rhs)
+{
+
+    return neuron_ != rhs.neuron_;
+
+}
+
+NeuralNetwork::iterator NeuralNetwork::iterator::operator++()
+{
+
+
+    // Wrap to beginning if we are in the last neuron of the last layer
+    /*if(neuron_ == &(*(owner_.neurons_.end()->end())))
+    {
+        neuron_ = &(*(owner_.neurons_.begin()->begin()));
+    }*/
+    // If we are in the last neuron, change to next layer
+    /*else*/ if(neuron_ == &(layer_->back())) 
+    {
+        ++layer_;
+        neuron_ = &(layer_->front());
+    }
+    else
+    {
+        ++neuron_;
+    }
+
+    return *this;
 
 }
