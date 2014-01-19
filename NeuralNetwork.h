@@ -58,7 +58,8 @@ class NeuralNetwork
 
                 typedef std::forward_iterator_tag iterator_category;
                 //typedef int difference_type;
-                iterator(Neuron* ptr, NeuralNetwork& owner);
+                iterator(   std::vector<Neuron>::iterator ptr, 
+                            NeuralNetwork& owner);
                 NeuralNetwork::iterator operator++();
                 Neuron& operator*();
                 bool operator!=(const NeuralNetwork::iterator& rhs);
@@ -69,8 +70,8 @@ class NeuralNetwork
             private:
                 
                 NeuralNetwork& owner_;
-                std::vector<Neuron>* layer_;
-                Neuron* neuron_;
+                std::vector<std::vector<Neuron> >::iterator layer_;
+                std::vector<Neuron>::iterator neuron_;
 
         };
 

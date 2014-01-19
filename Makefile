@@ -18,5 +18,8 @@ test:
 debug:
 	$(CC) $(SOURCES) $(CFLAGS) -g $(DEPENDENCIES) -o $(TARGET)Debug
 
+debug_test:
+	$(CC) $(TEST_SOURCES) $(CFLAGS) -g $(TEST_DEPENDENCIES) -o $(TARGET)DebugTest
+
 clean:
-	rm -rf $(TARGET) $(TARGET)Test $(TARGET)Debug
+	rm -rf $(TARGET) $(TARGET)Test $(TARGET)Debug $(TARGET)DebugTest

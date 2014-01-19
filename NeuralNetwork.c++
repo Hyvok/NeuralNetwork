@@ -360,7 +360,7 @@ int NeuralNetwork::getOutputSize()
 NeuralNetwork::iterator NeuralNetwork::begin()
 {
 
-    return iterator(&(neurons_.front().front()), *this);
+    return iterator(neurons_.front().begin(), *this);
     //return (*inputNeurons_).begin();
 
 }
@@ -368,13 +368,13 @@ NeuralNetwork::iterator NeuralNetwork::begin()
 NeuralNetwork::iterator NeuralNetwork::end()
 {
 
-    return iterator(&(*(neurons_.back().end())), *this);
+    return iterator(neurons_.back().end(), *this);
     //return (*outputNeurons_).end();
 
 }
 
-NeuralNetwork::iterator::iterator(  Neuron* ptr, NeuralNetwork& owner) : 
-                                    owner_(owner), layer_(0), neuron_(ptr) 
+NeuralNetwork::iterator::iterator(  std::vector<Neuron>::iterator iter, NeuralNetwork& owner) : 
+                                    owner_(owner), layer_(0), neuron_(iter) 
 {
 
     // Figure out in which layer we are and store it
@@ -382,9 +382,10 @@ NeuralNetwork::iterator::iterator(  Neuron* ptr, NeuralNetwork& owner) :
     {
         for(auto& neuron: layer)
         {
-            if(neuron_ == &neuron)
+            if(&(*neuron_) == &neuron)
             {
-                layer_ = &layer;
+                // This is probably not correct
+                layer_ = owner.neurons_.begin();
             }
         }
     }
@@ -408,21 +409,19 @@ bool NeuralNetwork::iterator::operator!=(const NeuralNetwork::iterator& rhs)
 NeuralNetwork::iterator NeuralNetwork::iterator::operator++()
 {
 
-
-    // Wrap to beginning if we are in the last neuron of the last layer
-    /*if(neuron_ == &(*(owner_.neurons_.end()->end())))
-    {
-        neuron_ = &(*(owner_.neurons_.begin()->begin()));
-    }*/
-    // If we are in the last neuron, change to next layer
-    /*else*/ if(neuron_ == &(layer_->back())) 
-    {
-        ++layer_;
-        neuron_ = &(layer_->front());
-    }
+    if(neuron_ == owner_.neurons_.back().end()){}
     else
     {
-        ++neuron_;
+
+        if(neuron_ == (*layer_).end())
+        {
+            ++layer_;
+            neuron_ = (*layer_).begin();
+        }
+        else
+        {
+            ++neuron_;
+        }
     }
 
     return *this;
