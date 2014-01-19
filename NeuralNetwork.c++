@@ -6,14 +6,15 @@
 #include "NeuralNetwork.h"
 #include "Neuron.h"
 
-NeuralNetwork::NeuralNetwork() :    inputNeurons_(0), outputNeurons_(0), 
-                                    inputValues_(0), outputValues_(0), 
+NeuralNetwork::NeuralNetwork() :    inputNeurons_(0), outputNeurons_(0),
+                                    inputValues_(0), outputValues_(0),
                                     nConnections_(0), nNeurons_(0) {}
 
-NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight) : 
-                                    neurons_(0), inputValues_(0), 
-                                    outputValues_(0), nConnections_(0), 
-                                    nNeurons_(0)
+NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer, 
+                                float weight) :
+                                neurons_(0), inputValues_(0),
+                                outputValues_(0), nConnections_(0),
+                                nNeurons_(0)
 {
 
     // Create neurons
@@ -30,7 +31,7 @@ int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
     int nNeurons = 0;
 
     neurons_.resize(nNeuronsPerLayer.size());
-                    
+
     int nLayer = 0;
 
     for(nLayer = 0; nLayer < nNeuronsPerLayer.size(); ++nLayer)
@@ -51,21 +52,21 @@ int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
     // Connect outputNeurons_ pointer to the correct layer
     outputNeurons_ = &neurons_[nNeuronsPerLayer.size()-1];
 
-    BOOST_LOG_TRIVIAL(info) << "Input neurons created: " 
+    BOOST_LOG_TRIVIAL(info) << "Input neurons created: "
                             << this->inputNeurons_->size();
-    BOOST_LOG_TRIVIAL(info) << "Output neurons created: " 
+    BOOST_LOG_TRIVIAL(info) << "Output neurons created: "
                             << this->outputNeurons_->size();
 
     return nNeurons;
 
 }
 
-int NeuralNetwork::connectNetwork(int weight)
+int NeuralNetwork::connectNetwork(float weight)
 {
 
     int nInputSynapses = 0;
     int nLayer = 0;
-    int weight_ = weight;
+    float weight_ = weight;
 
     if(weight == 0)
     {
@@ -76,7 +77,7 @@ int NeuralNetwork::connectNetwork(int weight)
 
     for(auto& layer: neurons_)
     {
-        if(nLayer == 0) 
+        if(nLayer == 0)
         {
             // Create input synapses to the first layer
             for(auto& neuron: layer)
@@ -120,16 +121,16 @@ int NeuralNetwork::connectNetwork(int weight)
         {
             for(auto& neuron: *prevLayer)
             {
-                // Connect the inputSynapses value pointer to the correct 
+                // Connect the inputSynapses value pointer to the correct
                 // outputSynapse in the previous layer
                 for(auto& connectedNeuron: layer)
                 {
-                    connectedNeuron.inputSynapses[nSynapse].value = 
+                    connectedNeuron.inputSynapses[nSynapse].value =
                                                 &neuron.outputSynapse.value;
                 }
                 ++nSynapse;
             }
-        }  
+        }
         nSynapse = 0;
         prevLayer = &layer;
         ++nLayer;
@@ -164,10 +165,10 @@ int NeuralNetwork::connectNetwork(int weight)
 
 }
 
-int NeuralNetwork::updateState()
+float NeuralNetwork::updateState()
 {
 
-    int change = 0;
+    float change = 0;
 
     for(auto& layer: neurons_)
     {
@@ -189,10 +190,10 @@ int NeuralNetwork::getConnections()
 }
 
 // TODO: combine getter functions with templates
-std::vector<std::vector<std::vector<int> > > NeuralNetwork::getWeights()
+std::vector<std::vector<std::vector<float> > > NeuralNetwork::getWeights()
 {
 
-    std::vector<std::vector<std::vector<int> > > state(neurons_.size());
+    std::vector<std::vector<std::vector<float> > > state(neurons_.size());
 
     int nLayer = 0;
     int nNeuron = 0;
@@ -202,14 +203,14 @@ std::vector<std::vector<std::vector<int> > > NeuralNetwork::getWeights()
     {
         BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
 
-        std::vector<std::vector<int > > layer_temp;
+        std::vector<std::vector<float > > layer_temp;
         state.push_back(layer_temp);
 
         for(auto& neuron: layer)
         {
             BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << nNeuron;
 
-            std::vector<int> neuron_temp;
+            std::vector<float> neuron_temp;
             state.back().push_back(neuron_temp);
 
             for(auto& synapse: neuron.inputSynapses)
@@ -229,10 +230,10 @@ std::vector<std::vector<std::vector<int> > > NeuralNetwork::getWeights()
 
 }
 
-std::vector<std::vector<std::vector<int> > > NeuralNetwork::getValues()
+std::vector<std::vector<std::vector<float> > > NeuralNetwork::getValues()
 {
 
-    std::vector<std::vector<std::vector<int> > > values(neurons_.size());
+    std::vector<std::vector<std::vector<float> > > values(neurons_.size());
 
     int nLayer = 0;
     int nNeuron = 0;
@@ -242,13 +243,13 @@ std::vector<std::vector<std::vector<int> > > NeuralNetwork::getValues()
     {
         BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
 
-        std::vector<std::vector<int > > layer_temp;
+        std::vector<std::vector<float > > layer_temp;
         values.push_back(layer_temp);
 
         for(auto& neuron: layer)
         {
             BOOST_LOG_TRIVIAL(info) << "\tNeuron: " << nNeuron;
-            std::vector<int> neuron_temp;
+            std::vector<float> neuron_temp;
             values.back().push_back(neuron_temp);
             for(auto& synapse: neuron.inputSynapses)
             {
@@ -265,10 +266,10 @@ std::vector<std::vector<std::vector<int> > > NeuralNetwork::getValues()
 
 }
 
-std::vector<std::vector<int> > NeuralNetwork::getState()
+std::vector<std::vector<float> > NeuralNetwork::getState()
 {
 
-    std::vector<std::vector<int> > state(neurons_.size());
+    std::vector<std::vector<float> > state(neurons_.size());
 
     int nLayer = 0;
     int nNeuron = 0;
@@ -278,7 +279,7 @@ std::vector<std::vector<int> > NeuralNetwork::getState()
     {
         BOOST_LOG_TRIVIAL(info) << "Layer: " << nLayer;
 
-        std::vector<int> layer_temp;
+        std::vector<float> layer_temp;
         state.push_back(layer_temp);
 
         for(auto& neuron: layer)
@@ -296,7 +297,7 @@ std::vector<std::vector<int> > NeuralNetwork::getState()
 
 }
 
-bool NeuralNetwork::setInput(std::vector<int> input)
+bool NeuralNetwork::setInput(std::vector<float> input)
 {
 
     if(input.size() != inputNeurons_->size())
@@ -311,10 +312,10 @@ bool NeuralNetwork::setInput(std::vector<int> input)
 
 }
 
-std::vector<int> NeuralNetwork::getOutput()
+std::vector<float> NeuralNetwork::getOutput()
 {
-    
-    std::vector<int> output(outputValues_.size());
+
+    std::vector<float> output(outputValues_.size());
 
     int nValue = 0;
 
@@ -329,7 +330,7 @@ std::vector<int> NeuralNetwork::getOutput()
 
 int NeuralNetwork::getInputSize()
 {
-    
+
     if(inputNeurons_ == nullptr)
     {
         return 0;
@@ -343,7 +344,7 @@ int NeuralNetwork::getInputSize()
 
 int NeuralNetwork::getOutputSize()
 {
-    
+
     if(outputNeurons_ == nullptr)
     {
         return 0;

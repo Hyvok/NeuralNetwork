@@ -5,6 +5,7 @@
 #include "InputSynapse.h"
 #include "OutputSynapse.h"
 
+// Implements a Neuron with a linear activation function
 class Neuron
 {
 
@@ -12,8 +13,9 @@ class Neuron
 
         Neuron();
 
-        // Returns true if the neuron fires
-        int updateState();
+        // Updates neuron state, returns the difference between old and new
+        // output value
+        float updateState();
 
         std::vector<InputSynapse> inputSynapses;
         OutputSynapse outputSynapse;

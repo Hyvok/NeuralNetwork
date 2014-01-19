@@ -14,29 +14,29 @@ class NeuralNetwork
         NeuralNetwork();
 
         // Default constructor, nNeuronsPerLayer specifies how many neurons
-        // per layer there is and weight is the default weight for all the 
+        // per layer there is and weight is the default weight for all the
         // synapses. If weight is 0 then the weights will be randomly chosen
         // between 0 and MAX_RANDOM_WEIGHT
-        NeuralNetwork(std::vector<int> nNeuronsPerLayer, int weight);
+        NeuralNetwork(std::vector<int> nNeuronsPerLayer, float weight);
 
-        // Calculates the new state of the network, 
+        // Calculates the new state of the network,
         // returns the total amount of change in output synapses
-        int updateState();
+        float updateState();
 
         // Returns number of connections in the network
         int getConnections();
 
         // Returns weights of the synapses in the network
-        std::vector<std::vector<std::vector<int> > > getWeights();
+        std::vector<std::vector<std::vector<float> > > getWeights();
 
         // Returns input values of the synapses in the network
-        std::vector<std::vector<std::vector<int> > > getValues();
+        std::vector<std::vector<std::vector<float> > > getValues();
 
         // Returns states of the output synapses in the network
-        std::vector<std::vector<int> > getState();
+        std::vector<std::vector<float> > getState();
 
         // Give input to the network, returns true if it is accepted
-        bool setInput(std::vector<int> input);
+        bool setInput(std::vector<float> input);
 
         // Get number of input neurons
         int getInputSize();
@@ -45,7 +45,7 @@ class NeuralNetwork
         int getOutputSize();
 
         // Get output from the network
-        std::vector<int> getOutput();
+        std::vector<float> getOutput();
 
 
     private:
@@ -54,14 +54,14 @@ class NeuralNetwork
         int createNeurons(std::vector<int> nNeuronsPerLayer);
 
         // Connects network and returns number of connections
-        int connectNetwork(int weight);
+        int connectNetwork(float weight);
 
         std::vector<std::vector<Neuron> > neurons_;
         std::vector<Neuron>* inputNeurons_;
         std::vector<Neuron>* outputNeurons_;
-    
-        std::vector<int> inputValues_;
-        std::vector<int*> outputValues_;
+
+        std::vector<float> inputValues_;
+        std::vector<float*> outputValues_;
 
         int nConnections_;
         int nNeurons_;

@@ -5,31 +5,31 @@
 
 BOOST_AUTO_TEST_CASE(neural_network_test)
 {
-    
+
     BOOST_TEST_MESSAGE("Testing NeuralNetwork with empty network...");
     NeuralNetwork emptyNetwork;
     BOOST_CHECK(emptyNetwork.getConnections() == 0);
     BOOST_CHECK(emptyNetwork.getInputSize() == 0);
     BOOST_CHECK(emptyNetwork.getOutputSize() == 0);
 
-    std::vector<std::vector<int> > zero_weight =    {{3, 2, 1}, {1, 1, 1}, 
+    std::vector<std::vector<int> > zero_weight =    {{3, 2, 1}, {1, 1, 1},
                                                     {5, 5, 5}};
 
     for(size_t nTest = 0; nTest < zero_weight.size(); ++nTest)
     {
-            
+
         std::stringstream ss;
 
         for(auto& nNeurons: zero_weight[nTest])
         {
-            ss << nNeurons << ", ";        
+            ss << nNeurons << ", ";
         }
-    
-        BOOST_TEST_MESSAGE( "Testing NeuralNetwork with: " 
+
+        BOOST_TEST_MESSAGE( "Testing NeuralNetwork with: "
                             << ss.str() << "with weight 0, input 0, 0, 0...");
 
         NeuralNetwork testNetwork(zero_weight[nTest], 0);
-    
+
         int nConnections = 0;
 
         for(size_t layer = 0; layer < zero_weight[nTest].size(); ++layer)
@@ -45,14 +45,14 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
             }
             else
             {
-                nConnections += zero_weight[nTest][layer+1] 
+                nConnections += zero_weight[nTest][layer+1]
                                 * zero_weight[nTest][layer];
             }
         }
         BOOST_CHECK(testNetwork.getConnections() == nConnections);
         BOOST_CHECK(testNetwork.getInputSize() == zero_weight[nTest][0]);
         BOOST_CHECK(testNetwork.getOutputSize() == zero_weight[nTest].back());
-        BOOST_CHECK(testNetwork.updateState() == 0);
+        BOOST_CHECK(testNetwork.updateState() == 0.0);
 
     }
 
@@ -64,14 +64,14 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
     BOOST_CHECK(testNetwork.getConnections() == 11);
     BOOST_CHECK(testNetwork.getInputSize() == 3);
     BOOST_CHECK(testNetwork.getOutputSize() == 1);
-    BOOST_CHECK(testNetwork.updateState() == 0);
+    BOOST_CHECK(testNetwork.updateState() == 0.0);
     testNetwork.updateState();
 
     BOOST_TEST_MESSAGE("Testing NeuralNetwork with 3, 2, 1 neurons weight 1, "
                         "input 1, 0, 0...");
-    BOOST_CHECK(testNetwork.getOutput()[0] == 0);
+    BOOST_CHECK(testNetwork.getOutput()[0] == 0.0);
     BOOST_CHECK(testNetwork.setInput({1, 0, 0}) == true);
-    BOOST_CHECK(testNetwork.updateState() == 5);
-    BOOST_CHECK(testNetwork.getOutput()[0] == 2);
+    BOOST_CHECK(testNetwork.updateState() == 5.0);
+    BOOST_CHECK(testNetwork.getOutput()[0] == 2.0);
 
 }

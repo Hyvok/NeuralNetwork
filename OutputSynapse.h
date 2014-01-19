@@ -8,7 +8,7 @@ class OutputSynapse
 
         OutputSynapse();
 
-        int value;
+        float value;
 
 };
 

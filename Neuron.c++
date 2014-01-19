@@ -4,11 +4,11 @@
 
 Neuron::Neuron() : inputSynapses(), outputSynapse() {}
 
-int Neuron::updateState()
+float Neuron::updateState()
 {
 
-    int sum = 0;
-    int difference = 0;
+    float sum = 0;
+    float difference = 0;
 
     if(inputSynapses.size() == 0)
     {
