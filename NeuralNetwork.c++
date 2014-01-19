@@ -409,21 +409,24 @@ bool NeuralNetwork::iterator::operator!=(const NeuralNetwork::iterator& rhs)
 NeuralNetwork::iterator NeuralNetwork::iterator::operator++()
 {
 
-    if(neuron_ == owner_.neurons_.back().end()){}
+    std::vector<Neuron>::iterator temp = neuron_;
+
+    ++temp;
+
+    if(temp == owner_.neurons_.back().end())
+    {
+        neuron_ = temp;
+    }
+    else if(temp == (*layer_).end())
+    {
+        ++layer_;
+        neuron_ = (*layer_).begin();
+    }
     else
     {
-
-        if(neuron_ == (*layer_).end())
-        {
-            ++layer_;
-            neuron_ = (*layer_).begin();
-        }
-        else
-        {
-            ++neuron_;
-        }
+        neuron_ = temp;
     }
-
+    
     return *this;
 
 }
