@@ -4,8 +4,8 @@ DEPENDENCIES=-lpthread -lboost_log -DBOOST_LOG_DYN_LINK
 TEST_DEPENDENCIES=-lboost_unit_test_framework -lpthread -lboost_log -DBOOST_LOG_DYN_LINK -DBOOST_TEST_DYN_LINK
 LDFLAGS=-v
 TARGET=NeuralNetwork
-SOURCES=Main.c++ InputSynapse.c++ OutputSynapse.c++ Neuron.c++ NeuralNetwork.c++
-TEST_SOURCES=MainTest.c++ InputSynapseTest.c++ InputSynapse.c++ OutputSynapseTest.c++ OutputSynapse.c++ Neuron.c++ NeuronTest.c++ NeuralNetworkTest.c++ NeuralNetwork.c++
+SOURCES=Main.c++ InputSynapse.c++ OutputSynapse.c++ Neuron.c++ NeuralNetwork.c++ NeuralNetworkTrainer.c++
+TEST_SOURCES=MainTest.c++ InputSynapseTest.c++ InputSynapse.c++ OutputSynapseTest.c++ OutputSynapse.c++ Neuron.c++ NeuronTest.c++ NeuralNetworkTest.c++ NeuralNetwork.c++ NeuralNetworkTrainer.c++ NeuralNetworkTrainerTest.c++
 OBJECTS=$(SOURCES:.c++=.o)
 
 all:

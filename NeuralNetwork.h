@@ -11,6 +11,7 @@ class NeuralNetwork
 {
 
     friend class iterator;
+    friend class NeuralNetworkTrainer;
 
     public:
 
@@ -25,6 +26,10 @@ class NeuralNetwork
         // Calculates the new state of the network,
         // returns the total amount of change in output synapses
         float updateState();
+
+        // Updates the weights of the network to newWeight,
+        // returns the amount of weights updated
+        int updateWeights();
 
         // Returns number of connections in the network
         int getConnections();
@@ -57,6 +62,9 @@ class NeuralNetwork
             public:
 
                 typedef std::forward_iterator_tag iterator_category;
+                typedef Neuron value_type;
+                typedef Neuron& reference;
+                typedef Neuron* pointer;
                 //typedef int difference_type;
                 iterator(   std::vector<Neuron>::iterator ptr, 
                             NeuralNetwork& owner);

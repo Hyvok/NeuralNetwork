@@ -17,6 +17,9 @@ class Neuron
         // output value
         float updateState();
 
+        // Updates all the inputSynapses weights to newWeight
+        int updateWeights();
+
         std::vector<InputSynapse> inputSynapses;
         OutputSynapse outputSynapse;
 

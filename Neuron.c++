@@ -26,3 +26,23 @@ float Neuron::updateState()
     return difference;
 
 }
+
+int Neuron::updateWeights()
+{
+
+    int nWeights = 0;
+
+    if(inputSynapses.size() == 0)
+    {
+        return 0;
+    }
+
+    for(auto& synapse: inputSynapses)
+    {
+        synapse.weight = synapse.newWeight;
+        ++nWeights;
+    }
+
+    return nWeights;
+
+}

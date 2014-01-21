@@ -11,6 +11,7 @@ class InputSynapse
         // Constructor for creating an InputSynapse with weight
         InputSynapse(float weight);
 
+        float newWeight;
         float weight;
         float* value;
 

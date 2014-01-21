@@ -20,6 +20,7 @@ NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer,
 
     // Create neurons
     nNeurons_ = createNeurons(nNeuronsPerLayer);
+
     // Create the synapses and connect the pointers between outputSynapses
     // and inputSynapses
     nConnections_ = connectNetwork(weight);
@@ -80,14 +81,11 @@ int NeuralNetwork::connectNetwork(float weight)
     {
         if(nLayer == 0)
         {
-            // Create input synapses to the first layer
+            // Create input synapses to the first layer with weight 1
+            // TODO: make sure the input layer weights are supposed to be 1...
             for(auto& neuron: layer)
             {
-                if(weight == 0)
-                {
-                    weight_ = rand() % MAX_RANDOM_WEIGHT;
-                }
-                neuron.inputSynapses.push_back(InputSynapse(weight_));
+                neuron.inputSynapses.push_back(InputSynapse(1.0));
                 ++nInputSynapses;
             }
         }
@@ -180,6 +178,29 @@ float NeuralNetwork::updateState()
     }
 
     return change;
+
+}
+
+int NeuralNetwork::updateWeights()
+{
+
+    int nWeights = 0;
+    size_t nLayer = 0;
+
+    for(auto& layer: neurons_)
+    {
+        // Don't update input neuron weights, they stay at 1
+        if(nLayer != 0)
+        {
+            for(auto& neuron: layer)
+            {
+                nWeights += neuron.updateWeights();
+            }
+        }
+        ++nLayer;
+    }
+
+    return nWeights;
 
 }
 
