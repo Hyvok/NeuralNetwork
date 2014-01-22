@@ -389,3 +389,10 @@ size_t NeuralNetwork::size()
     return neurons_.size();
 
 }
+
+std::vector<Neuron>& NeuralNetwork::back()
+{
+
+    return neurons_.back();
+
+}

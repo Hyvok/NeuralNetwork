@@ -4,20 +4,20 @@
 #include "NeuralNetworkTrainer.h"
 #include "NeuralNetwork.h"
 
-NeuralNetworkTrainer::NeuralNetworkTrainer() :  network_(0), input_(0),
+NeuralNetworkTrainer::NeuralNetworkTrainer() :  nn_(0), input_(0),
                                                 output_(0), nTrainings_(0) {}
 
 NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network) : 
-                                            network_(&network), input_(0),
+                                            nn_(&network), input_(0),
                                             output_(0), nTrainings_(0) {}
         
 NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network, 
                                             std::vector<float> input) :
-                                            network_(&network), input_(input),
+                                            nn_(&network), input_(input),
                                             output_(0), nTrainings_(0) 
 {
 
-    network_->setInput(input);
+    nn_->setInput(input);
 
 }
 
@@ -25,11 +25,11 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
 NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network, 
                                             std::vector<float> input,
                                             std::vector<float> output) :
-                                            network_(&network), input_(input),
+                                            nn_(&network), input_(input),
                                             output_(output), nTrainings_(0) 
 {
 
-    network_->setInput(input);
+    nn_->setInput(input);
 
 }
 
@@ -37,63 +37,81 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
 int NeuralNetworkTrainer::trainNetwork()
 {
 
-    std::vector<std::vector<float> > deltaOutput(network_->size());
-    float error = 0.0;
+    float err = 0.0;
+
+    std::vector<std::vector<float> > outputError(nn_->size());
 
     // Iterate over the layers in reverse order
-    for(size_t nLayer = network_->size()-1; nLayer > 0; --nLayer)
+    for(int nLayer = nn_->size()-1; nLayer > 0; --nLayer)
     {
-        if(nLayer == network_->size()-1)
+        if(nLayer == nn_->size()-1)
         {
-            for(size_t nNeuron = 0; nNeuron < (*network_)[nLayer].size(); ++nNeuron)
+            for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
-                deltaOutput[nLayer].push_back(((float)output_[nNeuron] - (*network_)[nLayer][nNeuron].out()));
+                outputError[nLayer].push_back(  (output_[n] - 
+                                                (*nn_)[nLayer][n].out()));
+                //std::cout << "SKIGULI1\n";
 
-                //std::cout << "Output error for neuron " << nNeuron << ": " << deltaOutput[nLayer][nNeuron] << "\n";
-
-                    for(size_t nConnectingNeuron = 0; nConnectingNeuron < (*network_)[nLayer-1].size(); ++nConnectingNeuron)
-                    {
-                        error = (*network_)[nLayer][nNeuron][nConnectingNeuron].weight + (deltaOutput[nLayer][nNeuron] * (*network_)[nLayer-1][nConnectingNeuron].out());
-                        //std::cout << "Updated weight for neuron " << nNeuron << ", synapse " << nConnectingNeuron << ": " << error << "\n";
-                        (*network_)[nLayer][nNeuron][nConnectingNeuron].newWeight += LEARNING_RATE * error;
-                    }
+                updateLinearWeights(    (*nn_)[nLayer], (*nn_)[nLayer-1], n,
+                                        outputError[nLayer]);
             }
         }
-        // Tämä ripulipaskakoodi ei toimi kuin kolmelle kerrokselle
-        else if(nLayer != 0)
+        // TODO: does not work for more layers than 3
+        else /*if(nLayer != 0)*/
         {
-            error = 0;
-            for(size_t nNeuron = 0; nNeuron < (*network_)[nLayer].size(); ++nNeuron)
+            for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
-                for(size_t nConnectingNeuron = 0; nConnectingNeuron < (*network_)[nLayer+1].size(); ++nConnectingNeuron)
+                for(size_t nPrev = 0; nPrev < (*nn_)[nLayer+1].size(); ++nPrev)
                 {
-                    error += (deltaOutput[nLayer+1][nConnectingNeuron] * (*network_)[nLayer+1][nConnectingNeuron][nNeuron].weight); 
-                    deltaOutput[nLayer].push_back(error);
-                    //std::cout << "Error for neuron " << nNeuron << ": " << error << "\n";
-                    error = 0;
+                    err += (    outputError[nLayer+1][nPrev] 
+                                * (*nn_)[nLayer+1][nPrev][n].weight); 
+
+                    outputError[nLayer].push_back(err);
+                    //std::cout << "Error calculation for neuron " << n << ", previous neuron " << nPrev << "\n";
+
                 }
+                err = 0;
             }
-            for(size_t nNeuron = 0; nNeuron < (*network_)[nLayer].size(); ++nNeuron)
+            for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
-                for(size_t nConnectingNeuron = 0; nConnectingNeuron < (*network_)[nLayer-1].size(); ++nConnectingNeuron)
-                {
-                    error = (*network_)[nLayer][nNeuron][nConnectingNeuron].weight + (deltaOutput[nLayer][nNeuron] * (*network_)[nLayer-1][nConnectingNeuron].out());
-                    //std::cout << "Updated weight for neuron " << nNeuron << ", synapse " << nConnectingNeuron << ": " << error << "\n";
-                    (*network_)[nLayer][nNeuron][nConnectingNeuron].newWeight += LEARNING_RATE * error;
-                }
+                updateLinearWeights(    (*nn_)[nLayer], (*nn_)[nLayer-1], n,
+                                        outputError[nLayer]);
             }
-        }
-        else
-        {
-            //std::cout << "Nothing to do with first layer yet\n";
         }
     }
 
-    int nUpdates = network_->updateWeights();
-    network_->updateState();
+    int nUpdates = nn_->updateWeights();
+    nn_->updateState();
     ++nTrainings_;
 
-    
     return nUpdates;
+
+}
+
+// TODO: check if it is worth converting this to inline
+float NeuralNetworkTrainer::calculateLinearWeight(  float weight, float err, 
+                                                    float out)
+{
+
+    return (weight + (err * out));
+
+}
+
+void NeuralNetworkTrainer::updateLinearWeights( std::vector<Neuron>& layer, 
+                                                std::vector<Neuron>& prevLayer,
+                                                int nNeuron,
+                                                std::vector<float> errors)
+{
+    
+    float err = 0;
+
+    for(size_t nPrev = 0; nPrev < prevLayer.size(); ++nPrev)
+    {
+        err = calculateLinearWeight(    layer[nNeuron][nPrev].weight, 
+                                        errors[nNeuron], 
+                                        prevLayer[nPrev].out());
+
+        layer[nNeuron][nPrev].newWeight += LEARNING_RATE * err;
+    }
 
 }

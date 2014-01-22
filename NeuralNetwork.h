@@ -61,6 +61,9 @@ class NeuralNetwork
         // Return how many layers the network has
         size_t size();
 
+        // Return last layer of the network
+        std::vector<Neuron>& back();
+
     private:
 
         // Creates the neurons, returns number of neurons
