@@ -20,6 +20,15 @@ class Neuron
         // Updates all the inputSynapses weights to newWeight
         int updateWeights();
 
+        // Operator for accessing the synapses
+        InputSynapse& operator[](int nSynapse);
+
+        // Get the size (=number) of inputSynapses
+        size_t size();
+
+        // Return value of the output synapse
+        float out();
+
         std::vector<InputSynapse> inputSynapses;
         OutputSynapse outputSynapse;
 

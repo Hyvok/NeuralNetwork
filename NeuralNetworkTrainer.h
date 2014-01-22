@@ -19,23 +19,23 @@ class NeuralNetworkTrainer
 
         // Constructor for constructing a NeuralNetworkTrainer to train
         // network with input
-        NeuralNetworkTrainer(NeuralNetwork& network, std::vector<int> input);
+        NeuralNetworkTrainer(NeuralNetwork& network, std::vector<float> input);
 
         // Constructor for constructing a NeuralNetworkTrainer to train 
         // network with input and adjust networks weights based on
         // difference between input and desired output
-        NeuralNetworkTrainer(   NeuralNetwork& network, std::vector<int> input,
-                                std::vector<int> output);
+        NeuralNetworkTrainer(   NeuralNetwork& network, std::vector<float> input,
+                                std::vector<float> output);
 
         // Do one iteration of training the network using back-propagation
-        // algorithm
-        void trainNetwork();
+        // algorithm, returns number of weights updated
+        int trainNetwork();
 
     private:
 
         NeuralNetwork* network_;
-        std::vector<int> input_;
-        std::vector<int> output_;
+        std::vector<float> input_;
+        std::vector<float> output_;
 
         int nTrainings_;
 

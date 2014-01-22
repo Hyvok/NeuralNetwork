@@ -16,29 +16,19 @@ BOOST_AUTO_TEST_CASE(neural_network_trainer_test)
     NeuralNetworkTrainer testTrainer(testNetwork, {1, 0, 0}, {1});
 
     BOOST_TEST_MESSAGE("NeuralNetworkTrainer trainNetwork()...");
-    testNetwork.setInput({1, 0, 0});
-    //testNetwork.getWeights();
-    //testNetwork.getState();
+    //testNetwork.setInput({1, 0, 0});
+
+    int nUpdates = 0;
 
     for(size_t i = 0; i < 500; ++i)
     {
         BOOST_TEST_MESSAGE("Training round " << i << "...");
-        testTrainer.trainNetwork();
-        //testNetwork.getWeights();
-        //testNetwork.getState();
+        nUpdates += testTrainer.trainNetwork();
         if(testNetwork.getOutput()[0] > 0.9 && testNetwork.getOutput()[0] < 1.1)
         {
-            BOOST_TEST_MESSAGE("Output value: " << testNetwork.getOutput()[0]);
+            BOOST_TEST_MESSAGE("Target output reached in " << i << " rounds with " << nUpdates << " weights updated, " << " output value: " << testNetwork.getOutput()[0]);
             break;
         }
     }
-    /*
-    testTrainer.trainNetwork();
-    testNetwork.updateState();
-    testNetwork.getWeights();
-    testTrainer.trainNetwork();
-    testNetwork.updateState();
-    testNetwork.getWeights();
-    testNetwork.getState();*/
 
 }

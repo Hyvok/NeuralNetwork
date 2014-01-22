@@ -55,36 +55,11 @@ class NeuralNetwork
         // Get output from the network
         std::vector<float> getOutput();
 
-        // Iterators so you can iterate over all the neurons
-        class iterator
-        {
+        // Operator [] for accessing the layers of the neural network
+        std::vector<Neuron>& operator[](size_t nLayer);
 
-            public:
-
-                typedef std::forward_iterator_tag iterator_category;
-                typedef Neuron value_type;
-                typedef Neuron& reference;
-                typedef Neuron* pointer;
-                //typedef int difference_type;
-                iterator(   std::vector<Neuron>::iterator ptr, 
-                            NeuralNetwork& owner);
-                NeuralNetwork::iterator operator++();
-                Neuron& operator*();
-                bool operator!=(const NeuralNetwork::iterator& rhs);
-                //pointer operator->();
-                //bool operator==(const self_type& rhs) { return ptr_ == rhs.ptr_; }
-                //bool operator!=(const self_type& rhs) { return ptr_ != rhs.ptr_; }
-
-            private:
-                
-                NeuralNetwork& owner_;
-                std::vector<std::vector<Neuron> >::iterator layer_;
-                std::vector<Neuron>::iterator neuron_;
-
-        };
-
-        iterator begin();
-        iterator end();
+        // Return how many layers the network has
+        size_t size();
 
     private:
 

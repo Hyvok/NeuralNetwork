@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include "Neuron.h"
+#include "InputSynapse.h"
 
 Neuron::Neuron() : inputSynapses(), outputSynapse() {}
 
@@ -44,5 +45,26 @@ int Neuron::updateWeights()
     }
 
     return nWeights;
+
+}
+
+InputSynapse& Neuron::operator[](int nSynapse)
+{
+
+    return inputSynapses[nSynapse];
+
+}
+
+size_t Neuron::size()
+{
+
+    return inputSynapses.size();
+
+}
+
+float Neuron::out()
+{
+
+    return outputSynapse.value;
 
 }

@@ -95,7 +95,7 @@ int NeuralNetwork::connectNetwork(float weight)
             {
                 // Create rest of the synapses, same amount of input synapses
                 // as there are neurons in the previous layer
-                for(auto& prevNeuron: *prevLayer)
+                for(size_t n = 0; n < (*prevLayer).size(); ++n)
                 {
                     if(weight == 0)
                     {
@@ -339,11 +339,9 @@ std::vector<float> NeuralNetwork::getOutput()
 
     std::vector<float> output(outputValues_.size());
 
-    int nValue = 0;
-
-    for(auto& value: outputValues_)
+    for(size_t i = 0; i < outputValues_.size(); ++i)
     {
-        output[nValue] = (*outputValues_[nValue]);
+        output[i] = (*outputValues_[i]);
     }
 
     return output;
@@ -378,76 +376,16 @@ int NeuralNetwork::getOutputSize()
 
 }
 
-NeuralNetwork::iterator NeuralNetwork::begin()
+std::vector<Neuron>& NeuralNetwork::operator[](size_t nLayer)
 {
 
-    return iterator(neurons_.front().begin(), *this);
-    //return (*inputNeurons_).begin();
+    return neurons_[nLayer];
 
 }
 
-NeuralNetwork::iterator NeuralNetwork::end()
+size_t NeuralNetwork::size()
 {
 
-    return iterator(neurons_.back().end(), *this);
-    //return (*outputNeurons_).end();
-
-}
-
-NeuralNetwork::iterator::iterator(  std::vector<Neuron>::iterator iter, NeuralNetwork& owner) : 
-                                    owner_(owner), layer_(0), neuron_(iter) 
-{
-
-    // Figure out in which layer we are and store it
-    for(auto& layer: owner.neurons_)
-    {
-        for(auto& neuron: layer)
-        {
-            if(&(*neuron_) == &neuron)
-            {
-                // This is probably not correct
-                layer_ = owner.neurons_.begin();
-            }
-        }
-    }
-
-}
-
-Neuron& NeuralNetwork::iterator::operator*()
-{
-
-    return *neuron_;
-
-}
-
-bool NeuralNetwork::iterator::operator!=(const NeuralNetwork::iterator& rhs)
-{
-
-    return neuron_ != rhs.neuron_;
-
-}
-
-NeuralNetwork::iterator NeuralNetwork::iterator::operator++()
-{
-
-    std::vector<Neuron>::iterator temp = neuron_;
-
-    ++temp;
-
-    if(temp == owner_.neurons_.back().end())
-    {
-        neuron_ = temp;
-    }
-    else if(temp == (*layer_).end())
-    {
-        ++layer_;
-        neuron_ = (*layer_).begin();
-    }
-    else
-    {
-        neuron_ = temp;
-    }
-    
-    return *this;
+    return neurons_.size();
 
 }
