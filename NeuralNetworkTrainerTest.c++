@@ -11,14 +11,14 @@ BOOST_AUTO_TEST_CASE(neural_network_trainer_test)
     NeuralNetwork emptyNetwork;
     NeuralNetworkTrainer emptyTrainer(emptyNetwork);
 
-    std::vector<int> normal = {3, 2, 1};
-    //std::vector<int> normal = {4, 3, 2, 1};
+    //std::vector<int> normal = {3, 2, 1};
+    std::vector<int> normal = {4, 3, 2, 1};
     NeuralNetwork testNetwork(normal, 0);
-    NeuralNetworkTrainer testTrainer(testNetwork, {1, 0, 0}, {1});
-    //NeuralNetworkTrainer testTrainer(testNetwork, {1, 0, 0, 0}, {1});
+    //NeuralNetworkTrainer testTrainer(testNetwork, {1, 0, 0}, {1});
+    NeuralNetworkTrainer testTrainer(testNetwork, {1, 0, 0, 0}, {1});
 
     BOOST_TEST_MESSAGE("NeuralNetworkTrainer trainNetwork()...");
-    BOOST_CHECK(testTrainer.trainNetwork() == 8);
+    BOOST_CHECK(testTrainer.trainNetwork() == 20);
 
     int nUpdates = 0;
 

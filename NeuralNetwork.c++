@@ -99,7 +99,10 @@ int NeuralNetwork::connectNetwork(float weight)
                 {
                     if(weight == 0)
                     {
-                        weight_ = rand() % MAX_RANDOM_WEIGHT;
+                        // Random weights have to be symmetrical around 0, if
+                        // they are all negative or positive the networks values
+                        // can get maxed out before it has time to converge!
+                        weight_ = rand() % MAX_RANDOM_WEIGHT - MAX_RANDOM_WEIGHT;
                     }
                     neuron.inputSynapses.push_back(InputSynapse(weight_));
                     ++nInputSynapses;

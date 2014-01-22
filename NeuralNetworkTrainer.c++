@@ -66,7 +66,7 @@ int NeuralNetworkTrainer::trainNetwork()
                     err += (    outputError[nLayer+1][nPrev] 
                                 * (*nn_)[nLayer+1][nPrev][n].weight); 
 
-                    //std::cout << "Error calculation for neuron " << n << ", previous neuron " << nPrev << "\n";
+                    //std::cout << "Error calculation for neuron " << n << ", previous neuron " << nPrev << " error: " << err << "\n";
 
                 }
                 outputError[nLayer].push_back(err);
