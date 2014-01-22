@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(neural_network_trainer_test)
     for(size_t i = 0; i < 500; ++i)
     {
         nUpdates += testTrainer.trainNetwork();
-
+        //testNetwork.getWeights();
         if(testNetwork.getOutput()[0] > 0.9 && testNetwork.getOutput()[0] < 1.1)
         {
             BOOST_TEST_MESSAGE( "Target output reached in " << i 
@@ -37,6 +37,7 @@ BOOST_AUTO_TEST_CASE(neural_network_trainer_test)
         if(i == 500-1)
         {
             BOOST_ERROR("Output not converging in 500 rounds...");
+            testNetwork.getWeights();
             break;
         }
     }

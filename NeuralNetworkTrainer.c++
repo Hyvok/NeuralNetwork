@@ -57,7 +57,7 @@ int NeuralNetworkTrainer::trainNetwork()
             }
         }
         // TODO: does not work for more layers than 3
-        else /*if(nLayer != 0)*/
+        else 
         {
             for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
@@ -66,10 +66,10 @@ int NeuralNetworkTrainer::trainNetwork()
                     err += (    outputError[nLayer+1][nPrev] 
                                 * (*nn_)[nLayer+1][nPrev][n].weight); 
 
-                    outputError[nLayer].push_back(err);
                     //std::cout << "Error calculation for neuron " << n << ", previous neuron " << nPrev << "\n";
 
                 }
+                outputError[nLayer].push_back(err);
                 err = 0;
             }
             for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
