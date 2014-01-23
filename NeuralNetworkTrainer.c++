@@ -8,13 +8,17 @@ NeuralNetworkTrainer::NeuralNetworkTrainer() :  nn_(0), input_(0),
                                                 output_(0), nTrainings_(0) {}
 
 NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network) : 
-                                            nn_(&network), input_(0),
-                                            output_(0), nTrainings_(0) {}
+                                            nn_(&network), 
+                                            type_(nn_->getNeuronType()), 
+                                            input_(0), output_(0), 
+                                            nTrainings_(0) {}
         
 NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network, 
                                             std::vector<float> input) :
-                                            nn_(&network), input_(input),
-                                            output_(0), nTrainings_(0) 
+                                            nn_(&network), 
+                                            type_(nn_->getNeuronType()), 
+                                            input_(input), output_(0), 
+                                            nTrainings_(0) 
 {
 
     nn_->setInput(input);
@@ -25,15 +29,17 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
 NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network, 
                                             std::vector<float> input,
                                             std::vector<float> output) :
-                                            nn_(&network), input_(input),
-                                            output_(output), nTrainings_(0) 
+                                            nn_(&network), 
+                                            type_(nn_->getNeuronType()), 
+                                            input_(input), output_(output), 
+                                            nTrainings_(0) 
 {
 
     nn_->setInput(input);
 
 }
 
-
+// TODO: split into smaller parts
 int NeuralNetworkTrainer::trainNetwork()
 {
 
@@ -48,34 +54,56 @@ int NeuralNetworkTrainer::trainNetwork()
         {
             for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
-                outputError[nLayer].push_back(  (output_[n] - 
-                                                (*nn_)[nLayer][n].out()));
-                //std::cout << "SKIGULI1\n";
-
-                updateLinearWeights(    (*nn_)[nLayer], (*nn_)[nLayer-1], n,
-                                        outputError[nLayer]);
+                if(type_ == Neuron::Type::TYPE_LINEAR)
+                {
+                    outputError[nLayer].push_back(  (output_[n] - 
+                                                    (*nn_)[nLayer][n].out()));
+            
+                    updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
+                                    outputError[nLayer]);
+                }
+                // TYPE_SIGMOID
+                else
+                {
+                    outputError[nLayer].push_back(  (*nn_)[nLayer][n].out() * 
+                                                    (1 - (*nn_)[nLayer][n].out()) * 
+                                                    (output_[n] - 
+                                                    (*nn_)[nLayer][n].out()));
+            
+                    updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
+                                    outputError[nLayer]);
+                }
             }
         }
-        // TODO: does not work for more layers than 3
         else 
         {
             for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
                 for(size_t nPrev = 0; nPrev < (*nn_)[nLayer+1].size(); ++nPrev)
                 {
-                    err += (    outputError[nLayer+1][nPrev] 
+                    if(type_ == Neuron::Type::TYPE_LINEAR)
+                    {
+                        err += (    outputError[nLayer+1][nPrev] 
+                                    * (*nn_)[nLayer+1][nPrev][n].weight); 
+
+                        //std::cout << "Error calculation for neuron " << n << ", previous neuron " << nPrev << " error: " << err << "\n";
+                    }
+                    // TYPE_SIGMOID
+                    else
+                    {
+                        err +=  (*nn_)[nLayer][n].out() * 
+                                (1 - (*nn_)[nLayer][n].out()) * 
+                                (outputError[nLayer+1][nPrev] 
                                 * (*nn_)[nLayer+1][nPrev][n].weight); 
-
-                    //std::cout << "Error calculation for neuron " << n << ", previous neuron " << nPrev << " error: " << err << "\n";
-
+                    }
                 }
                 outputError[nLayer].push_back(err);
                 err = 0;
             }
             for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
-                updateLinearWeights(    (*nn_)[nLayer], (*nn_)[nLayer-1], n,
-                                        outputError[nLayer]);
+                updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
+                                outputError[nLayer]);
             }
         }
     }
@@ -97,7 +125,7 @@ float NeuralNetworkTrainer::calculateLinearWeight(  float weight, float err,
 
 }
 
-void NeuralNetworkTrainer::updateLinearWeights( std::vector<Neuron>& layer, 
+void NeuralNetworkTrainer::updateWeights( std::vector<Neuron>& layer, 
                                                 std::vector<Neuron>& prevLayer,
                                                 int nNeuron,
                                                 std::vector<float> errors)

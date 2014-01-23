@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "NeuralNetwork.h"
+#include "Neuron.h"
 
 #define LEARNING_RATE 0.1
 
@@ -29,24 +30,22 @@ class NeuralNetworkTrainer
 
         // Do one iteration of training the network using back-propagation
         // algorithm, returns number of weights updated
-        // TODO: currently works only with neurons with linear activation
-        // functions
         int trainNetwork();
 
     private:
 
         // Function for iterating over a layer and updating the weights for a
         // network with neurons with linear activation function
-        void updateLinearWeights(   std::vector<Neuron>& layer, 
-                                    std::vector<Neuron>& prevLayer,
-                                    int nNeuron,
-                                    std::vector<float> errors);
+        void updateWeights( std::vector<Neuron>& layer, 
+                            std::vector<Neuron>& prevLayer, int nNeuron, 
+                            std::vector<float> errors);
 
         // Function for calculating the desired weight change for a network
         // with neurons with a linear activation function
         float calculateLinearWeight(float weight, float err, float out);
 
         NeuralNetwork* nn_;
+        Neuron::Type type_;
         std::vector<float> input_;
         std::vector<float> output_;
 

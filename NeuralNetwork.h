@@ -10,18 +10,27 @@
 class NeuralNetwork
 {
 
-    friend class iterator;
     friend class NeuralNetworkTrainer;
 
     public:
 
+        // Constructs an empty network with no neurons
         NeuralNetwork();
 
         // Default constructor, nNeuronsPerLayer specifies how many neurons
         // per layer there is and weight is the default weight for all the
         // synapses. If weight is 0 then the weights will be randomly chosen
-        // between 0 and MAX_RANDOM_WEIGHT
+        // between -MAX_RANDOM_WEIGHT/2 and MAX_RANDOM_WEIGHT/2, neuron type
+        // defaults to TYPE_SIGMOID
         NeuralNetwork(std::vector<int> nNeuronsPerLayer, float weight);
+
+        // Constructor, nNeuronsPerLayer specifies how many neurons
+        // per layer there is and weight is the default weight for all the
+        // synapses. If weight is 0 then the weights will be randomly chosen
+        // between -MAX_RANDOM_WEIGHT/2 and MAX_RANDOM_WEIGHT/2, type specifies
+        // the type of neuron (TYPE_LINEAR or TYPE_SIGMOID)
+        NeuralNetwork(  std::vector<int> nNeuronsPerLayer, float weight, 
+                        Neuron::Type type);
 
         // Calculates the new state of the network,
         // returns the total amount of change in output synapses
@@ -61,13 +70,16 @@ class NeuralNetwork
         // Return how many layers the network has
         size_t size();
 
+        // Return Type of the neurons in the network
+        Neuron::Type getNeuronType();
+
         // Return last layer of the network
         std::vector<Neuron>& back();
 
     private:
 
         // Creates the neurons, returns number of neurons
-        int createNeurons(std::vector<int> nNeuronsPerLayer);
+        int createNeurons(std::vector<int> nNeuronsPerLayer, Neuron::Type type);
 
         // Connects network and returns number of connections
         int connectNetwork(float weight);
@@ -81,6 +93,7 @@ class NeuralNetwork
 
         int nConnections_;
         int nNeurons_;
+        Neuron::Type type_;
 
 };
 

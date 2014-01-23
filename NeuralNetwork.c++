@@ -15,11 +15,11 @@ NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer,
                                 float weight) :
                                 neurons_(0), inputValues_(0),
                                 outputValues_(0), nConnections_(0),
-                                nNeurons_(0)
+                                nNeurons_(0), type_(Neuron::Type::TYPE_SIGMOID)
 {
 
     // Create neurons
-    nNeurons_ = createNeurons(nNeuronsPerLayer);
+    nNeurons_ = createNeurons(nNeuronsPerLayer, type_);
 
     // Create the synapses and connect the pointers between outputSynapses
     // and inputSynapses
@@ -27,7 +27,24 @@ NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer,
 
 }
 
-int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
+NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer, 
+                                float weight, Neuron::Type type) :
+                                neurons_(0), inputValues_(0),
+                                outputValues_(0), nConnections_(0),
+                                nNeurons_(0), type_(type)
+{
+
+    // Create neurons
+    nNeurons_ = createNeurons(nNeuronsPerLayer, type_);
+
+    // Create the synapses and connect the pointers between outputSynapses
+    // and inputSynapses
+    nConnections_ = connectNetwork(weight);
+
+}
+
+int NeuralNetwork::createNeurons(   std::vector<int> nNeuronsPerLayer, 
+                                    Neuron::Type type)
 {
 
     int nNeurons = 0;
@@ -41,7 +58,7 @@ int NeuralNetwork::createNeurons(std::vector<int> nNeuronsPerLayer)
         for(size_t j = 0; j < nNeuronsPerLayer[nLayer]; ++j)
         {
             // Create neuron
-            neurons_[nLayer].emplace_back();
+            neurons_[nLayer].emplace_back(type);
             ++nNeurons;
         }
     }
@@ -390,6 +407,13 @@ size_t NeuralNetwork::size()
 {
 
     return neurons_.size();
+
+}
+
+Neuron::Type NeuralNetwork::getNeuronType()
+{
+
+    return type_;
 
 }
 

@@ -2,7 +2,9 @@
 #include <sstream>
 #include <boost/test/unit_test.hpp>
 #include "NeuralNetwork.h"
+#include "Neuron.h"
 
+// TODO: only tests networks of TYPE_LINEAR
 BOOST_AUTO_TEST_CASE(neural_network_test)
 {
 
@@ -28,7 +30,8 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
         BOOST_TEST_MESSAGE( "Testing NeuralNetwork with: "
                             << ss.str() << "with weight 0, input 0, 0, 0...");
 
-        NeuralNetwork testNetwork(zero_weight[nTest], 0);
+        NeuralNetwork testNetwork(  zero_weight[nTest], 0, 
+                                    Neuron::Type::TYPE_LINEAR);
 
         int nConnections = 0;
 
@@ -60,7 +63,7 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
                         "input 0, 0, 0...");
 
     std::vector<int> normal_thousand = {3, 2, 1};
-    NeuralNetwork testNetwork(normal_thousand, 1);
+    NeuralNetwork testNetwork(normal_thousand, 1, Neuron::Type::TYPE_LINEAR);
     BOOST_CHECK(testNetwork.getConnections() == 11);
     BOOST_CHECK(testNetwork.getInputSize() == 3);
     BOOST_CHECK(testNetwork.getOutputSize() == 1);

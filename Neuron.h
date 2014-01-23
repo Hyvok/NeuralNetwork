@@ -11,7 +11,13 @@ class Neuron
 
     public:
 
+        enum Type { TYPE_LINEAR, TYPE_SIGMOID };
+
+        // Construct a neuron, defaults to TYPE_SIGMOID
         Neuron();
+
+        // Construct Neuron of Type
+        Neuron(Type type);
 
         // Updates neuron state, returns the difference between old and new
         // output value
@@ -31,6 +37,10 @@ class Neuron
 
         std::vector<InputSynapse> inputSynapses;
         OutputSynapse outputSynapse;
+
+    private:
+
+        Type type_;
 
 };
 
