@@ -63,7 +63,7 @@ int Neuron::updateWeights()
 
 }
 
-InputSynapse& Neuron::operator[](int nSynapse)
+Neuron::InputSynapse& Neuron::operator[](int nSynapse)
 {
 
     return inputSynapses[nSynapse];

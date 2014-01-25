@@ -7,6 +7,7 @@
 
 #define LEARNING_RATE 0.1
 
+// TODO: implement validation set support
 class NeuralNetworkTrainer
 {
 

@@ -1,4 +1,16 @@
 A simple neural network implementation mainly for fun. With some sort of unit 
 tests as well.
 
+Currently supports:
+
+- Feed-forward networks
+- Neuron activation functions:
+    - Linear
+    - Sigmoid
+- Any number of neurons and layers (within implementation limits)
+- Training using:
+    - Regular back-propagation
+        - With linear activation function
+        - With sigmoid activation function
+
 Kalle Hyvönen <kalle.hyvonen@dgkelectronics.com>

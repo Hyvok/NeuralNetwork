@@ -2,8 +2,8 @@
 #define NEURON_H
 
 #include <vector>
-#include "InputSynapse.h"
-#include "OutputSynapse.h"
+//#include "InputSynapse.h"
+//#include "OutputSynapse.h"
 
 // Implements a Neuron with a linear activation function
 class Neuron
@@ -26,14 +26,40 @@ class Neuron
         // Updates all the inputSynapses weights to newWeight
         int updateWeights();
 
-        // Operator for accessing the synapses
-        InputSynapse& operator[](int nSynapse);
-
         // Get the size (=number) of inputSynapses
         size_t size();
 
         // Return value of the output synapse
         float out();
+
+        class InputSynapse 
+        {
+
+            public:
+
+                InputSynapse() : weight(0), newWeight(1), value(nullptr) {}
+                InputSynapse(int weight) :  weight(weight), newWeight(1), 
+                                            value(nullptr) {}
+
+                float weight;
+                float newWeight;
+                float* value;
+
+        };
+
+        class OutputSynapse
+        {
+
+            public:
+
+                OutputSynapse() : value(0) {}
+
+                float value;
+
+        };
+
+        // Operator for accessing the synapses
+        InputSynapse& operator[](int nSynapse);
 
         std::vector<InputSynapse> inputSynapses;
         OutputSynapse outputSynapse;

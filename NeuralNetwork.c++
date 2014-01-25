@@ -102,7 +102,7 @@ int NeuralNetwork::connectNetwork(float weight)
             // TODO: make sure the input layer weights are supposed to be 1...
             for(auto& neuron: layer)
             {
-                neuron.inputSynapses.push_back(InputSynapse(1.0));
+                neuron.inputSynapses.emplace_back(1.0);
                 ++nInputSynapses;
             }
         }
@@ -121,7 +121,8 @@ int NeuralNetwork::connectNetwork(float weight)
                         // can get maxed out before it has time to converge!
                         weight_ = rand() % MAX_RANDOM_WEIGHT - MAX_RANDOM_WEIGHT;
                     }
-                    neuron.inputSynapses.push_back(InputSynapse(weight_));
+                    neuron.inputSynapses.emplace_back();
+                    neuron.inputSynapses.back().weight = weight_;
                     ++nInputSynapses;
                 }
             }
