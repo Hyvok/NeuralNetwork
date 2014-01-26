@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 #include "Neuron.h"
-#include "InputSynapse.h"
 
 Neuron::Neuron() : inputSynapses(), outputSynapse(), type_(TYPE_SIGMOID) {}
 

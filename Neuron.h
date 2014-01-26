@@ -2,8 +2,6 @@
 #define NEURON_H
 
 #include <vector>
-//#include "InputSynapse.h"
-//#include "OutputSynapse.h"
 
 // Implements a Neuron with a linear activation function
 class Neuron
