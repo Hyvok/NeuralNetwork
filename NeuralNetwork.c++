@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <iterator>
 #include <boost/log/trivial.hpp>
 // rand()
@@ -77,7 +78,17 @@ NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer,
 int NeuralNetwork::createNeurons(   std::vector<int> nNeuronsPerLayer, 
                                     Neuron::Type type)
 {
+    
+    BOOST_LOG_TRIVIAL(info) << "Creating new NeuralNetwork";
 
+    // Put the architecture in a stringstream for logging
+    std::stringstream architecture;
+    for(auto& layer: nNeuronsPerLayer)
+    {
+        architecture << layer << " ";
+    }
+    BOOST_LOG_TRIVIAL(info) << "\tArchitecture of the network: " 
+                            << architecture.str();
     int nNeurons = 0;
 
     neurons_.resize(nNeuronsPerLayer.size());
@@ -94,17 +105,17 @@ int NeuralNetwork::createNeurons(   std::vector<int> nNeuronsPerLayer,
         }
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Layers created: " << nLayer;
-    BOOST_LOG_TRIVIAL(info) << "Neurons created: " << nNeurons;
+    BOOST_LOG_TRIVIAL(info) << "\tLayers created: " << nLayer;
+    BOOST_LOG_TRIVIAL(info) << "\tNeurons created: " << nNeurons;
 
     // Connect inputNeurons_ pointer to the correct layer
     inputNeurons_ = &neurons_[0];
     // Connect outputNeurons_ pointer to the correct layer
     outputNeurons_ = &neurons_[nNeuronsPerLayer.size()-1];
 
-    BOOST_LOG_TRIVIAL(info) << "Input neurons created: "
+    BOOST_LOG_TRIVIAL(info) << "\tInput neurons created: "
                             << this->inputNeurons_->size();
-    BOOST_LOG_TRIVIAL(info) << "Output neurons created: "
+    BOOST_LOG_TRIVIAL(info) << "\tOutput neurons created: "
                             << this->outputNeurons_->size();
 
     return nNeurons;
@@ -124,7 +135,7 @@ int NeuralNetwork::connectNetwork(float weight)
     }
 
     std::vector<Neuron>* prevLayer;
-
+    
     for(auto& layer: neurons_)
     {
         if(nLayer == 0)
@@ -150,7 +161,8 @@ int NeuralNetwork::connectNetwork(float weight)
                         // Random weights have to be symmetrical around 0, if
                         // they are all negative or positive the networks values
                         // can get maxed out before it has time to converge!
-                        weight_ = (rand() % MAX_RANDOM_WEIGHT - (MAX_RANDOM_WEIGHT/2)) / 5.0;
+                        weight_ = (rand() % MAX_RANDOM_WEIGHT - 
+                                            (MAX_RANDOM_WEIGHT/2)) / 5.0;
                     }
                     neuron.inputSynapses.emplace_back();
                     neuron.inputSynapses.back().weight = weight_;
@@ -210,8 +222,7 @@ int NeuralNetwork::connectNetwork(float weight)
         ++nNeuron;
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Connections created: " << nInputSynapses;
-    BOOST_LOG_TRIVIAL(info) << "Actual layers created: " << nLayer;
+    BOOST_LOG_TRIVIAL(info) << "\tConnections created: " << nInputSynapses;
     return nInputSynapses;
 
 }

@@ -51,7 +51,7 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
         }
         catch(std::ios_base::failure e)
         {
-            BOOST_LOG_TRIVIAL(error) << "Error opening file " << image 
+            BOOST_LOG_TRIVIAL(error) << "\tError opening file " << image 
                                     << ", error: " << e.what();
             error = true;
         }
@@ -75,7 +75,7 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
         }
         if(!error)
         {
-            BOOST_LOG_TRIVIAL(info) << "Loaded image " << image 
+            BOOST_LOG_TRIVIAL(info) << "\tLoaded image " << image 
                                     << ", size: " << dimensions.x << "x" 
                                     << dimensions.y << ", type: " << type;
         }
@@ -88,7 +88,7 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
     // all the images and we know the total amount of images
     mapOutputs();
 
-    BOOST_LOG_TRIVIAL(info) << "Number of images loaded: " << nMappedImages_ 
+    BOOST_LOG_TRIVIAL(info) << "\tNumber of images loaded: " << nMappedImages_ 
                             << ", most amount of pixels: " << nMaxPixels;
 
 }

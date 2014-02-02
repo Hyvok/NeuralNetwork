@@ -55,6 +55,8 @@ int main(int argc, char *argv[])
     
     std::vector<int> nNeurons(0);
 
+    BOOST_LOG_TRIVIAL(info) << "Configuration:";
+
     if(vm.count("help")) 
     {
         std::cout << cmdLineOptions << "\n";
@@ -67,39 +69,39 @@ int main(int argc, char *argv[])
     if(vm.count("activation"))
     {
         // TODO: implement
-        BOOST_LOG_TRIVIAL(info) << "Activation function of neurons set to: "
+        BOOST_LOG_TRIVIAL(info) << "\tActivation function of neurons set to: "
                                 << vm.count("activation");
     }
     else
     {
         // TODO: implement
-        BOOST_LOG_TRIVIAL(info) << "Activation function defaulting to "
+        BOOST_LOG_TRIVIAL(info) << "\tActivation function defaulting to "
                                 << QUOTEMACRO(DEFAULT_ACTIVATION_FUNCTION);
     }
     if(vm.count("iterations"))
     {
-        BOOST_LOG_TRIVIAL(info) << "Number of training iterations set to: "
+        BOOST_LOG_TRIVIAL(info) << "\tNumber of training iterations set to: "
                                 << vm["iterations"].as<int>();
     }
     else
     {
-        BOOST_LOG_TRIVIAL(info) << "Number of training iterations defaulting "  
+        BOOST_LOG_TRIVIAL(info) << "\tNumber of training iterations defaulting "  
                                 << "to " << QUOTEMACRO(DEFAULT_ITERATIONS);
     }
     if(vm.count("training"))
     {
         // TODO: implement
-        BOOST_LOG_TRIVIAL(info) << "Training algorithm set to: "
+        BOOST_LOG_TRIVIAL(info) << "\tTraining algorithm set to: "
                                 << vm["training"].as<std::string>();
     }
     else
     {
-        BOOST_LOG_TRIVIAL(info) << "Training algorithm defaulting to "
+        BOOST_LOG_TRIVIAL(info) << "\tTraining algorithm defaulting to "
                                 << QUOTEMACRO(BACKPROP);
     }
     if(vm.count("learning_rate"))
     {
-        BOOST_LOG_TRIVIAL(info) << "Learning rate set to "
+        BOOST_LOG_TRIVIAL(info) << "\tLearning rate set to "
                                 << vm["learning_rate"].as<float>();
     }
     // TODO: network option is too greedy, implement validator
@@ -109,7 +111,7 @@ int main(int argc, char *argv[])
 
         std::stringstream ss;
         
-        ss << "Number of hidden neurons was set to ";
+        ss << "\tNumber of hidden neurons was set to ";
 
         for(size_t n = 0; n < vm["network"].as<std::vector<int> >().size(); ++n)
         {
@@ -131,13 +133,14 @@ int main(int argc, char *argv[])
 
         for(size_t n = 0; n < vm["input-file"].as<std::vector<std::string> >().size(); ++n)
         {
-            ss << "Input file: ";
+            ss << "\tInput file: ";
             ss << vm["input-file"].as<std::vector<std::string> >()[n];
             BOOST_LOG_TRIVIAL(info) << ss.str();
             ss.str("");
         }
     }
 
+    BOOST_LOG_TRIVIAL(info) << "Loading images...";
     NnImageMap imageMap(vm["input-file"].as<std::vector<std::string> >());
 
     // Default to input neurons divided by two for the amount of hidden neurons
@@ -149,58 +152,50 @@ int main(int argc, char *argv[])
     nNeurons.insert(nNeurons.begin(), imageMap.inSize());
     nNeurons.push_back(imageMap.outSize());
 
-    // Put the architecture in a stringstream for logging
-    std::stringstream architecture;
-    for(auto& layer: nNeurons)
-    {
-        architecture << layer;
-
-        // No space after the last one
-        if(&layer == &(nNeurons.back())) {}
-        else
-        {
-            architecture << " ";
-        }
-    }
-    BOOST_LOG_TRIVIAL(info) << "Architecture of the network: " 
-                            << architecture.str();
-
     NeuralNetwork network(nNeurons);
 
     NeuralNetworkTrainer trainer(   network, imageMap, 
                                     vm["learning_rate"].as<float>());
 
     // Train network
-    for(size_t i = 0; i < vm["iterations"].as<int>(); ++i)
+    BOOST_LOG_TRIVIAL(info) << "Starting network training...";
+    // Disable cursor
+    system("setterm -cursor off");
+    for(size_t i = 0; i < vm["iterations"].as<int>() + 1; ++i)
     {
+        // Print info every 100 iterations, otherwise printing will suck a lot
+        // of CPU
+        if(i % 100 == 0)
+        {
+            std::cout.flush();
+            std::cout << "\rIteration " << i << "/" << vm["iterations"].as<int>();
+        }
         trainer.trainNetwork();
     }
+    std::cout << std::endl;
+    // Enable cursor
+    system("setterm -cursor on");
+    BOOST_LOG_TRIVIAL(info) << "Network training finished...";
 
     // After training print out the network outputs with all the inputs
-    std::stringstream result;
+    BOOST_LOG_TRIVIAL(info) << "Final test results:";
     for(size_t n = 0; n < imageMap.size(); ++n)
     {
-        result  << "Input "
-                << imageMap[n].trainingCase << ", desired output: " 
-                << imageMap[n].getOutStr();
+        BOOST_LOG_TRIVIAL(info) << "\tInput "
+                                << imageMap[n].trainingCase 
+                                << ", desired output: " 
+                                << imageMap[n].getOutStr();
 
         network.setInput(imageMap[n].input);
         std::vector<float> out = network.getOutput();
 
-        result << ", output: ";
 
         for(size_t i = 0; i < out.size(); ++i)
         {
-            result << out[i];
-            if(i == (out.size() - 1)) {}
-            else
-            {
-                result << " ";
-            }
+            BOOST_LOG_TRIVIAL(info) << "\t\tOutput neuron " << i << " output: \t"
+                                    << out[i];
         }
 
-        BOOST_LOG_TRIVIAL(info) << result.str();
-        result.str("");
     }
 
 
