@@ -1,29 +1,28 @@
-CC=clang++
-CFLAGS=-Wall -std=c++11
-DEPENDENCIES=-lpthread -lboost_log -DBOOST_LOG_DYN_LINK 
-TEST_DEPENDENCIES=	$(DEPENDENCIES) -lboost_unit_test_framework \
-					-DBOOST_TEST_DYN_LINK
-LDFLAGS=-v
-TARGET=NeuralNetwork
-MAIN=Main.c++
-SOURCES=	Neuron.c++ NeuralNetwork.c++ \
-			NeuralNetworkTrainer.c++
-TEST_SOURCES=	$(SOURCES) MainTest.c++ NeuronTest.c++ NeuralNetworkTest.c++ \
-				NeuralNetworkTrainerTest.c++
-OBJECTS=$(SOURCES:.c++=.o)
+CC=			clang++
+CFLAGS=		-Wall -std=c++11
+DEP=		-lpthread -lboost_log -DBOOST_LOG_DYN_LINK -lpng \
+			-lboost_program_options
+TEST_DEP=	$(DEP) -lboost_unit_test_framework -DBOOST_TEST_DYN_LINK
+LDFLAGS=	-v
+TARGET=		NeuralNetwork
+MAIN=		Main.c++
+SRC=		Neuron.c++ NeuralNetwork.c++ NeuralNetworkTrainer.c++ \
+			NnImageMap.c++
+TEST_SRC=	$(SRC) MainTest.c++ NeuronTest.c++ NeuralNetworkTest.c++ \
+			NeuralNetworkTrainerTest.c++ NnImageMapTest.c++
 
 all:
-	$(CC) $(SOURCES) $(MAIN) $(CFLAGS) $(DEPENDENCIES) -o $(TARGET)
+	$(CC) $(SRC) $(MAIN) $(CFLAGS) $(DEP) -o $(TARGET)
 
 test:
-	$(CC) $(TEST_SOURCES) $(CFLAGS) $(TEST_DEPENDENCIES) -o $(TARGET)Test
+	$(CC) $(TEST_SRC) $(CFLAGS) $(TEST_DEP) -o $(TARGET)Test
 # ./NeuralNetworkTest --log_level=message
 
 debug:
-	$(CC) $(SOURCES) $(CFLAGS) -g $(DEPENDENCIES) -o $(TARGET)Debug
+	$(CC) $(SRC) $(CFLAGS) -g $(DEP) -o $(TARGET)Debug
 
 debug_test:
-	$(CC) $(TEST_SOURCES) $(CFLAGS) -g $(TEST_DEPENDENCIES) -o \
+	$(CC) $(TEST_SRC) $(CFLAGS) -g $(TEST_DEP) -o \
 	$(TARGET)DebugTest
 
 clean:

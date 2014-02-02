@@ -4,6 +4,7 @@
 #include "NeuralNetworkTrainer.h"
 #include "NeuralNetwork.h"
 
+// TODO: make better tests
 BOOST_AUTO_TEST_CASE(neural_network_trainer_test)
 {
 

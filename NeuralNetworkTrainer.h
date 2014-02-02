@@ -2,10 +2,11 @@
 #define NEURAL_NETWORK_TRAINER_H
 
 #include <vector>
+#include "NnImageMap.h"
 #include "NeuralNetwork.h"
 #include "Neuron.h"
 
-#define LEARNING_RATE 0.1
+#define LEARNING_RATE 0.01
 
 // TODO: implement validation set support
 class NeuralNetworkTrainer
@@ -29,9 +30,17 @@ class NeuralNetworkTrainer
         NeuralNetworkTrainer(   NeuralNetwork& network, std::vector<float> input,
                                 std::vector<float> output);
 
+        // Constructor for constructing a NeuralNetworkTrainer to train network
+        // with input contained in imageMap
+        NeuralNetworkTrainer(NeuralNetwork& network, NnImageMap& imageMap);
+
         // Do one iteration of training the network using back-propagation
         // algorithm, returns number of weights updated
         int trainNetwork();
+
+        // Set learning rate, defaults to LEARNING_RATE if not explicitly set
+        // TODO: fix this to be specified in the constructor
+        void setLearningRate(float rate);
 
     private:
 
@@ -43,14 +52,18 @@ class NeuralNetworkTrainer
 
         // Function for calculating the desired weight change for a network
         // with neurons with a linear activation function
-        float calculateLinearWeight(float weight, float err, float out);
+        float calculateWeight(float weight, float err, float out);
 
         NeuralNetwork* nn_;
         Neuron::Type type_;
+        NnImageMap* imageMap_;
+        // TODO: Get rid of these
         std::vector<float> input_;
         std::vector<float> output_;
 
         int nTrainings_;
+
+        float learningRate_;
 
 };
 

@@ -119,7 +119,7 @@ int NeuralNetwork::connectNetwork(float weight)
                         // Random weights have to be symmetrical around 0, if
                         // they are all negative or positive the networks values
                         // can get maxed out before it has time to converge!
-                        weight_ = rand() % MAX_RANDOM_WEIGHT - MAX_RANDOM_WEIGHT;
+                        weight_ = (rand() % MAX_RANDOM_WEIGHT - (MAX_RANDOM_WEIGHT/2)) / 5.0;
                     }
                     neuron.inputSynapses.emplace_back();
                     neuron.inputSynapses.back().weight = weight_;
@@ -345,6 +345,7 @@ bool NeuralNetwork::setInput(std::vector<float> input)
 
     if(input.size() != inputNeurons_->size())
     {
+        BOOST_LOG_TRIVIAL(error) << "setInput(): input does not match network input size!";
         return false;
     }
     else

@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(neural_network_test)
                         "input 1, 0, 0...");
     BOOST_CHECK(testNetwork.getOutput()[0] == 0.0);
     BOOST_CHECK(testNetwork.setInput({1, 0, 0}) == true);
-    std::cout << testNetwork.updateState();
+    BOOST_CHECK(testNetwork.updateState() == 5);
     //BOOST_CHECK(testNetwork.updateState() == 5.0);
     BOOST_CHECK(testNetwork.getOutput()[0] == 2.0);
     testNetwork.getState();

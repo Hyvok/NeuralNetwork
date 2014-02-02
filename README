@@ -12,5 +12,26 @@ Currently supports:
     - Regular back-propagation
         - With linear activation function
         - With sigmoid activation function
+- Configuration via:
+    - Command-line
+
+Bugs (or features):
+    - Command-line options --network (or -n) cannot be the last option before
+      input files, otherwise the command-line option parsing will fail
+
+Dependencies:
+    - clang++ (tested with clang 3.2-7ubuntu1)
+    - boost_log (tested with libboost-log1.54-dev)
+    - boost_program_options (tested with libboost-program-options1.54-dev)
+
+    For tests you need:
+        - boost_unit_test_framework (tested with libboost-test1.54-dev)
+
+How you can try it out:
+    1. Get dependencies
+    2. Compile project with: 
+        make
+    3. You can run an example with 4x4px images with the command: 
+        ./NeuralNetwork --learning_rate 0.5 --iterations 100000 ./test_images/4x4/*
 
 Kalle Hyvönen <kalle.hyvonen@dgkelectronics.com>
