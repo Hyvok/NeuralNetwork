@@ -73,13 +73,7 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
         {
             nMaxPixels = currentPixels;
         }
-        // Not sure if this can even happen
-        if(currentPixels == 0 && !error)
-        {
-            BOOST_LOG_TRIVIAL(error) << "Error loading image " << image
-                                    << ", image contains no pixels";
-        }
-        else if(!error)
+        if(!error)
         {
             BOOST_LOG_TRIVIAL(info) << "Loaded image " << image 
                                     << ", size: " << dimensions.x << "x" 
@@ -96,28 +90,6 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
 
     BOOST_LOG_TRIVIAL(info) << "Number of images loaded: " << nMappedImages_ 
                             << ", most amount of pixels: " << nMaxPixels;
-
-    /*for(auto& image: mappedImages_)
-    {
-        int x = 0;
-        std::cout << "Mapped image: " << image.trainingCase << ", input: \n";
-        for(auto& inputValue: image.input)
-        {
-            std::cout << inputValue << "\t";
-            ++x;
-            if(x == 10)
-            {
-                std::cout << "\n";
-                x = 0;
-            }
-        }
-        std::cout << "Mapped image: " << image.trainingCase << ", output: \n";
-        for(auto& outputValue: image.output)
-        {
-           std::cout << outputValue << " ";
-        }
-        std::cout << "\n";
-    }*/
 
 }
 
@@ -196,7 +168,14 @@ std::string NnImageMap::NnImageMapData::getOutStr()
 
     for(auto& val: output)
     {
-        ss << val << " ";
+        ss << val;
+
+        // No space after the last element
+        if(&val == &(output.back())) {}
+        else
+        {
+            ss << " ";
+        }
     }
 
     return ss.str();

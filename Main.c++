@@ -190,7 +190,12 @@ int main(int argc, char *argv[])
 
         for(size_t i = 0; i < out.size(); ++i)
         {
-            std::cout << out[i] << " ";
+            std::cout << out[i];
+            if(i == (out.size() - 1)) {}
+            else
+            {
+                std::cout << " ";
+            }
         }
         std::cout << "\n";
 
