@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
         ("training,t", po::value<std::string>(), "training algorithm")
         ("iterations,i", po::value<int>(), "number of iterations of training")
         ("input-file", po::value<std::vector<std::string> >(), "input file for training")
-        ("learning_rate", po::value<float>(), "learning rate for back-propagation");
+        ("learning_rate", po::value<float>()->default_value(DEFAULT_LEARNING_RATE), 
+            "learning rate for back-propagation");
 
     // Map all the filenames that come after the options to name input-file
     po::positional_options_description pd;
@@ -82,7 +83,6 @@ int main(int argc, char *argv[])
     }
     else
     {
-        // TODO: Default ok?
         BOOST_LOG_TRIVIAL(info) << "Number of training iterations defaulting "  
                                 << "to " << QUOTEMACRO(DEFAULT_ITERATIONS);
     }
@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
     NeuralNetwork network(nNeurons, 0);
     //network.updateState();
 
-    NeuralNetworkTrainer trainer(network, imageMap);
-    trainer.setLearningRate(vm["learning_rate"].as<float>());
+    NeuralNetworkTrainer trainer(   network, imageMap, 
+                                    vm["learning_rate"].as<float>());
 
     /*network.getWeights();
     network.getState();

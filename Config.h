@@ -7,6 +7,7 @@
 #define DEFAULT_ITERATIONS              10000
 #define DEFAULT_TRAINING                BACKPROP
 #define DEFAULT_ACTIVATION_FUNCTION     TYPE_SIGMOID
+#define DEFAULT_LEARNING_RATE           0.1
 
 // Helper macros
 #define QUOTE(x) #x
