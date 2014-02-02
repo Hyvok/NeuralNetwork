@@ -170,19 +170,13 @@ int main(int argc, char *argv[])
     NeuralNetworkTrainer trainer(   network, imageMap, 
                                     vm["learning_rate"].as<float>());
 
+    // Train network
     for(size_t i = 0; i < vm["iterations"].as<int>(); ++i)
     {
         trainer.trainNetwork();
-        std::vector<float> out = network.getOutput();
-        //network.getState();
-        //std::cout << "Network output after training: ";
-        for(size_t j = 0; j < out.size(); ++j)
-        {
-            //std::cout << out[j] << " ";
-        }
-        //std::cout << "\n";
     }
 
+    // After training print out the network outputs with all the inputs
     for(size_t n = 0; n < imageMap.size(); ++n)
     {
         std::cout   << "Network output with input "
@@ -190,7 +184,6 @@ int main(int argc, char *argv[])
                     << imageMap[n].getOutStr();
 
         network.setInput(imageMap[n].input);
-        network.updateState();
         std::vector<float> out = network.getOutput();
 
         std::cout << ", output: ";

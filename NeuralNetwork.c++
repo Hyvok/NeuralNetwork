@@ -382,6 +382,7 @@ bool NeuralNetwork::setInput(std::vector<float> input)
     else
     {
         inputValues_ = input;
+        updateState();
         return true;
     }
 

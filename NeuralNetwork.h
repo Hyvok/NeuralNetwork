@@ -57,7 +57,8 @@ class NeuralNetwork
         // Returns states of the output synapses in the network
         std::vector<std::vector<float> > getState();
 
-        // Give input to the network, returns true if it is accepted
+        // Give input to the network and updateState(),
+        // returns true if it is accepted
         bool setInput(std::vector<float> input);
 
         // Get number of input neurons

@@ -13,6 +13,8 @@ Currently supports:
         - Regular back-propagation
             - With linear activation function
             - With sigmoid activation function
+        - Incremental training
+            - Currently random order only
     - Configuration via:
         - Command-line
 

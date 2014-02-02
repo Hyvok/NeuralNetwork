@@ -77,11 +77,6 @@ int NeuralNetworkTrainer::trainNetwork()
     // to match it
     size_t nTrainingCase = rand() % (*imageMap_).size();
     nn_->setInput((*imageMap_)[nTrainingCase].in());
-    nn_->updateState();
-
-    //BOOST_LOG_TRIVIAL(info) << "Random value for training case selection: " << nTrainingCase;
-    //BOOST_LOG_TRIVIAL(info) << "Training case: " << (*imageMap_)[nTrainingCase].trainingCase;
-    //BOOST_LOG_TRIVIAL(info) << "Desired output for training case: " << (*imageMap_)[nTrainingCase].getOutStr();
 
     std::vector<std::vector<float> > outputError(nn_->size());
 
@@ -90,34 +85,27 @@ int NeuralNetworkTrainer::trainNetwork()
     {
         if(nLayer == nn_->size()-1)
         {
+            // Iterate through neurons in the layer
             for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
                 if(type_ == Neuron::Type::TYPE_LINEAR)
                 {
-                    outputError[nLayer].push_back(  ((*imageMap_)[nTrainingCase].out()[n] - 
-                                                    (*nn_)[nLayer][n].out()));
-            
+                    outErr =    ((*imageMap_)[nTrainingCase].out()[n] - 
+                                (*nn_)[nLayer][n].out());
+                    outputError[nLayer].push_back(outErr);
+
                     updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
                                     outputError[nLayer]);
                 }
                 // TYPE_SIGMOID, default
                 else
                 {
-                    // Funnily enough it doesn't seem to matter do I use this
-                    // target - output or the same with the sigmoid derivative
-                    // it seems to work fine anyway...
-                    /*outErr =    ((*imageMap_)[nTrainingCase].out()[n] - 
-                                (*nn_)[nLayer][n].out());*/
-                    outErr =  (*nn_)[nLayer][n].out() * ((1.0 - 
-                                    (*nn_)[nLayer][n].out()) * 
-                                    ((*imageMap_)[nTrainingCase].out()[n] - 
-                                    (*nn_)[nLayer][n].out()));
-                    //BOOST_LOG_TRIVIAL(info) << "Desired neuron output value: " << (*imageMap_)[nTrainingCase].out()[n] << " error: " << outErr; 
+                    outErr =    (*nn_)[nLayer][n].out() * ((1.0 - 
+                                (*nn_)[nLayer][n].out()) * 
+                                ((*imageMap_)[nTrainingCase].out()[n] - 
+                                (*nn_)[nLayer][n].out()));
                     outputError[nLayer].push_back(outErr);
-                    /*if(outErr == 0)
-                    {
-                        break;
-                    }*/
+
                     updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
                                     outputError[nLayer]);
                 }
@@ -131,15 +119,14 @@ int NeuralNetworkTrainer::trainNetwork()
                 {
                     if(type_ == Neuron::Type::TYPE_LINEAR)
                     {
-                        err = (    outputError[nLayer+1][nPrev] 
-                                    * (*nn_)[nLayer+1][nPrev][n].weight); 
+                        err = ( outputError[nLayer+1][nPrev] 
+                                * (*nn_)[nLayer+1][nPrev][n].weight); 
 
-                        //std::cout << "Error calculation for neuron " << n << ", previous neuron " << nPrev << " error: " << err << "\n";
                     }
                     // TYPE_SIGMOID
                     else
                     {
-                        err =  (*nn_)[nLayer][n].out() * 
+                        err =   (*nn_)[nLayer][n].out() * 
                                 (1 - (*nn_)[nLayer][n].out()) * 
                                 (outputError[nLayer+1][nPrev] 
                                 * (*nn_)[nLayer+1][nPrev][n].weight); 
@@ -154,15 +141,9 @@ int NeuralNetworkTrainer::trainNetwork()
                                 outputError[nLayer]);
             }
         }
-        /*if(outErr == 0)
-        {
-            break;
-        }*/
     }
 
     int nUpdates = nn_->updateWeights();
-    // Might not be needed
-    nn_->updateState();
     ++nTrainings_;
 
     return nUpdates;
@@ -174,7 +155,7 @@ float NeuralNetworkTrainer::calculateWeight(    float weight, float err,
                                                 float out)
 {
 
-    return ((err * out));
+    return (err * out);
 
 }
 
@@ -191,7 +172,7 @@ void NeuralNetworkTrainer::updateWeights(   std::vector<Neuron>& layer,
         err = calculateWeight(    layer[nNeuron][nPrev].weight, 
                                         errors[nNeuron], 
                                         prevLayer[nPrev].out());
-        //BOOST_LOG_TRIVIAL(info) << "Weight error: " << err;
+
         layer[nNeuron][nPrev].newWeight =   layer[nNeuron][nPrev].weight + 
                                             (learningRate_ * err);
     }
