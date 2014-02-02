@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
     po::options_description config("Options in config file and command-line");
     config.add_options()
         ("network,n", po::value<std::vector<int> >()->multitoken(), 
-            "architecture of the network in number of neurons per layer")
+            "number of hidden neurons per layer, "
+            "input and output layers sizes are based on input data)")
         ("activation,a", po::value<std::string>(), 
             "activation function of the neurons")
         ("training,t", po::value<std::string>(), "training algorithm")
@@ -50,6 +51,8 @@ int main(int argc, char *argv[])
     po::variables_map vm;
     po::store(po::command_line_parser(argc, argv).options(cmdLineOptions).positional(pd).run(), vm);
     po::notify(vm);
+    
+    std::vector<int> nNeurons(0);
 
     if(vm.count("help")) 
     {
@@ -102,10 +105,11 @@ int main(int argc, char *argv[])
     // TODO: network option is too greedy, implement validator
     if(vm.count("network")) 
     {
-        // TODO: warnings if the architecture doesn't match input file size
+        nNeurons = vm["network"].as<std::vector<int> >();
+
         std::stringstream ss;
         
-        ss << "Architecture of the neural network was set to ";
+        ss << "Number of hidden neurons was set to ";
 
         for(size_t n = 0; n < vm["network"].as<std::vector<int> >().size(); ++n)
         {
@@ -117,7 +121,9 @@ int main(int argc, char *argv[])
     else 
     {
         // Architecture needs to be set
-        BOOST_LOG_TRIVIAL(info) << "Architecture of the neural network was not set";
+        BOOST_LOG_TRIVIAL(info) << "Number of hidden neurons not set, " 
+                                << "defaulting to number of input neurons "
+                                << "divided by two";
         //return 1;
     }
     if(vm.count("input-file"))
@@ -136,9 +142,17 @@ int main(int argc, char *argv[])
 
     NnImageMap imageMap(vm["input-file"].as<std::vector<std::string> >());
 
+    // Default to input neurons divided by two for the amount of hidden neurons
+    if(nNeurons.size() == 0)
+    {
+        nNeurons.resize(1);
+        nNeurons[0] = imageMap.inSize() / 2;
+    }
+    nNeurons.insert(nNeurons.begin(), imageMap.inSize());
+    nNeurons.push_back(imageMap.outSize());
     // TODO: ignores network size option
     //std::cout << "imageMap.inSize(): " << imageMap.inSize() << "\n" << "imageMap.outSize(): " << imageMap.outSize() << "\n";
-    NeuralNetwork network({imageMap.inSize(), imageMap.inSize(), imageMap.outSize()}, 0);
+    NeuralNetwork network(nNeurons, 0);
     //network.updateState();
 
     NeuralNetworkTrainer trainer(network, imageMap);
@@ -162,7 +176,6 @@ int main(int argc, char *argv[])
         }
         //std::cout << "\n";
     }
-    network.getWeights();
 
     for(size_t n = 0; n < imageMap.size(); ++n)
     {
