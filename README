@@ -2,18 +2,19 @@ A simple neural network implementation mainly for fun. With some sort of unit
 tests as well.
 
 Currently supports:
-
-- Feed-forward networks
-- Neuron activation functions:
-    - Linear
-    - Sigmoid
-- Any number of neurons and layers (within implementation limits)
-- Training using:
-    - Regular back-propagation
-        - With linear activation function
-        - With sigmoid activation function
-- Configuration via:
-    - Command-line
+    - Learning from png images
+        - Currently converts all images to grayscale
+    - Feed-forward networks
+    - Neuron activation functions:
+        - Linear
+        - Sigmoid
+    - Any number of neurons and layers (within implementation limits)
+    - Training using:
+        - Regular back-propagation
+            - With linear activation function
+            - With sigmoid activation function
+    - Configuration via:
+        - Command-line
 
 Bugs (or features):
     - Command-line options --network (or -n) cannot be the last option before
@@ -32,6 +33,6 @@ How you can try it out:
     2. Compile project with: 
         make
     3. You can run an example with 4x4px images with the command: 
-        ./NeuralNetwork --learning_rate 0.5 --iterations 100000 ./test_images/4x4/*
+        ./NeuralNetwork --learning_rate 0.5 --iterations 100000 ./test_images/2x2/*
 
 Kalle Hyvönen <kalle.hyvonen@dgkelectronics.com>

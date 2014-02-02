@@ -73,7 +73,7 @@ class NnImageMap
 
             void operator()(boost::gil::gray8_pixel_t p) const 
             {
-                input_->push_back(boost::gil::at_c<0>(p));
+                input_->push_back(p[0]);
 
                 // Needed for color
                 //input_->push_back(boost::gil::at_c<1>(p));
@@ -89,6 +89,7 @@ class NnImageMap
 
         std::vector<NnImageMap::NnImageMapData> mappedImages_;
         int nMappedImages_;
+        int nLargestInput_;
 
 };
 

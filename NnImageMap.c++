@@ -18,10 +18,11 @@ NnImageMap::NnImageMapData::NnImageMapData( std::string trainingCase,
                             trainingCase(trainingCase), input(input), 
                             output(output) {}
 
-NnImageMap::NnImageMap() : mappedImages_(0), nMappedImages_(0) {}
+NnImageMap::NnImageMap() :  mappedImages_(0), nMappedImages_(0), 
+                            nLargestInput_(0) {}
 
 NnImageMap::NnImageMap( std::vector<std::string> fileNames) : 
-                        mappedImages_(0), nMappedImages_(0)
+                        mappedImages_(0), nMappedImages_(0), nLargestInput_(0)
 {
 
     // Currently hardcoded to BW images
@@ -60,7 +61,7 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
         if(!error)
         {
             // TODO: combine pixels for BW images
-            input.resize(currentPixels);
+            // Using PixelInserter insert each pixel value to input
             for_each_pixel(const_view(img), PixelInserter(&input));
             mappedImages_.emplace_back(image, input, output);
             input.clear();
@@ -86,6 +87,8 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
         }
         error = false;
     }
+
+    nLargestInput_ = nMaxPixels;
 
     // Fix the sizes of the output vectors in mappedImages_ after we have loaded
     // all the images and we know the total amount of images

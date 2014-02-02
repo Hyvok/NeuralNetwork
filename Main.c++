@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 
     // TODO: ignores network size option
     //std::cout << "imageMap.inSize(): " << imageMap.inSize() << "\n" << "imageMap.outSize(): " << imageMap.outSize() << "\n";
-    NeuralNetwork network({imageMap.inSize(), (imageMap.inSize()/2), imageMap.outSize()}, 0);
+    NeuralNetwork network({imageMap.inSize(), imageMap.inSize(), imageMap.outSize()}, 0);
     //network.updateState();
 
     NeuralNetworkTrainer trainer(network, imageMap);
