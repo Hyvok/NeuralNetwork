@@ -1,8 +1,8 @@
 #include <iostream>
 #include <sstream>
 #include <boost/test/unit_test.hpp>
-#include "NeuralNetwork.h"
-#include "Neuron.h"
+#include "../NeuralNetwork.h"
+#include "../Neuron.h"
 
 // TODO: only tests networks of TYPE_LINEAR
 BOOST_AUTO_TEST_CASE(neural_network_test)

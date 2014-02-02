@@ -1,8 +1,8 @@
 #include <iostream>
 #include <sstream>
 #include <boost/test/unit_test.hpp>
-#include "NeuralNetworkTrainer.h"
-#include "NeuralNetwork.h"
+#include "../NeuralNetworkTrainer.h"
+#include "../NeuralNetwork.h"
 
 // TODO: make better tests
 BOOST_AUTO_TEST_CASE(neural_network_trainer_test)

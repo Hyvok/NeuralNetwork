@@ -1,5 +1,5 @@
 #include <boost/test/unit_test.hpp>
-#include "Neuron.h"
+#include "../Neuron.h"
 
 BOOST_AUTO_TEST_CASE(neuron_test)
 {

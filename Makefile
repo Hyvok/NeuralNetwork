@@ -8,8 +8,9 @@ TARGET=		NeuralNetwork
 MAIN=		Main.c++
 SRC=		Neuron.c++ NeuralNetwork.c++ NeuralNetworkTrainer.c++ \
 			NnImageMap.c++
-TEST_SRC=	$(SRC) MainTest.c++ NeuronTest.c++ NeuralNetworkTest.c++ \
-			NeuralNetworkTrainerTest.c++ NnImageMapTest.c++
+TEST_SRC=	$(SRC) ./tests/MainTest.c++ ./tests/NeuronTest.c++ \
+			./tests/NeuralNetworkTest.c++ ./tests/NeuralNetworkTrainerTest.c++ \
+			./tests/NnImageMapTest.c++
 
 all:
 	$(CC) $(SRC) $(MAIN) $(CFLAGS) $(DEP) -o $(TARGET)
