@@ -120,11 +120,9 @@ int main(int argc, char *argv[])
     }
     else 
     {
-        // Architecture needs to be set
         BOOST_LOG_TRIVIAL(info) << "Number of hidden neurons not set, " 
                                 << "defaulting to number of input neurons "
                                 << "divided by two";
-        //return 1;
     }
     if(vm.count("input-file"))
     {
@@ -150,6 +148,22 @@ int main(int argc, char *argv[])
     }
     nNeurons.insert(nNeurons.begin(), imageMap.inSize());
     nNeurons.push_back(imageMap.outSize());
+
+    // Put the architecture in a stringstream for logging
+    std::stringstream architecture;
+    for(auto& layer: nNeurons)
+    {
+        architecture << layer;
+
+        // No space after the last one
+        if(&layer == &(nNeurons.back())) {}
+        else
+        {
+            architecture << " ";
+        }
+    }
+    BOOST_LOG_TRIVIAL(info) << "Architecture of the network: " 
+                            << architecture.str();
     // TODO: ignores network size option
     //std::cout << "imageMap.inSize(): " << imageMap.inSize() << "\n" << "imageMap.outSize(): " << imageMap.outSize() << "\n";
     NeuralNetwork network(nNeurons, 0);
