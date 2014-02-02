@@ -32,6 +32,11 @@ class NeuralNetwork
         NeuralNetwork(  std::vector<int> nNeuronsPerLayer, float weight, 
                         Neuron::Type type);
 
+        // Constructors without weight option, weight defaults to random values
+        NeuralNetwork(std::vector<int> nNeuronsPerLayer);
+
+        NeuralNetwork(std::vector<int> nNeuronsPerLayer, Neuron::Type type);
+
         // Calculates the new state of the network,
         // returns the total amount of change in output synapses
         float updateState();

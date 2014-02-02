@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
     }
     if(vm.count("training"))
     {
+        // TODO: implement
         BOOST_LOG_TRIVIAL(info) << "Training algorithm set to: "
                                 << vm["training"].as<std::string>();
     }
@@ -96,7 +97,6 @@ int main(int argc, char *argv[])
         BOOST_LOG_TRIVIAL(info) << "Training algorithm defaulting to "
                                 << QUOTEMACRO(BACKPROP);
     }
-    // TODO: add default learning rate to Config.h
     if(vm.count("learning_rate"))
     {
         BOOST_LOG_TRIVIAL(info) << "Learning rate set to "
@@ -164,19 +164,11 @@ int main(int argc, char *argv[])
     }
     BOOST_LOG_TRIVIAL(info) << "Architecture of the network: " 
                             << architecture.str();
-    // TODO: ignores network size option
-    //std::cout << "imageMap.inSize(): " << imageMap.inSize() << "\n" << "imageMap.outSize(): " << imageMap.outSize() << "\n";
-    NeuralNetwork network(nNeurons, 0);
-    //network.updateState();
+
+    NeuralNetwork network(nNeurons);
 
     NeuralNetworkTrainer trainer(   network, imageMap, 
                                     vm["learning_rate"].as<float>());
-
-    /*network.getWeights();
-    network.getState();
-    trainer.trainNetwork();
-    network.getWeights();
-    network.getState();*/
 
     for(size_t i = 0; i < vm["iterations"].as<int>(); ++i)
     {
