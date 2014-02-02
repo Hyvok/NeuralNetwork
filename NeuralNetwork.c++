@@ -376,7 +376,8 @@ bool NeuralNetwork::setInput(std::vector<float> input)
 
     if(input.size() != inputNeurons_->size())
     {
-        BOOST_LOG_TRIVIAL(error) << "setInput(): input does not match network input size!";
+        BOOST_LOG_TRIVIAL(error)    << "setInput(): input does not match "
+                                    << "network input size!";
         return false;
     }
     else

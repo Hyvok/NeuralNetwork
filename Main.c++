@@ -177,29 +177,32 @@ int main(int argc, char *argv[])
     }
 
     // After training print out the network outputs with all the inputs
+    std::stringstream result;
     for(size_t n = 0; n < imageMap.size(); ++n)
     {
-        std::cout   << "Network output with input "
-                    << imageMap[n].trainingCase << ", desired output: " 
-                    << imageMap[n].getOutStr();
+        result  << "Input "
+                << imageMap[n].trainingCase << ", desired output: " 
+                << imageMap[n].getOutStr();
 
         network.setInput(imageMap[n].input);
         std::vector<float> out = network.getOutput();
 
-        std::cout << ", output: ";
+        result << ", output: ";
 
         for(size_t i = 0; i < out.size(); ++i)
         {
-            std::cout << out[i];
+            result << out[i];
             if(i == (out.size() - 1)) {}
             else
             {
-                std::cout << " ";
+                result << " ";
             }
         }
-        std::cout << "\n";
 
+        BOOST_LOG_TRIVIAL(info) << result.str();
+        result.str("");
     }
+
 
     return 0;
 

@@ -169,13 +169,6 @@ std::string NnImageMap::NnImageMapData::getOutStr()
     for(auto& val: output)
     {
         ss << val;
-
-        // No space after the last element
-        if(&val == &(output.back())) {}
-        else
-        {
-            ss << " ";
-        }
     }
 
     return ss.str();

@@ -34,7 +34,7 @@ How you can try it out:
     1. Get dependencies
     2. Compile project with: 
         make
-    3. You can run an example with 4x4px images with the command: 
+    3. You can run an example with 2x2px images with the command: 
         ./NeuralNetwork --learning_rate 0.5 --network 4 --iterations 100000 ./test_images/2x2/*
 
 Kalle Hyvönen <kalle.hyvonen@dgkelectronics.com>
