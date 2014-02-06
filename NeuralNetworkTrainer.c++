@@ -67,7 +67,7 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
 }
 
 // TODO: split into smaller parts
-int NeuralNetworkTrainer::trainNetwork()
+unsigned int NeuralNetworkTrainer::trainNetwork()
 {
 
     float err = 0.0;
@@ -81,7 +81,7 @@ int NeuralNetworkTrainer::trainNetwork()
     std::vector<std::vector<float> > outputError(nn_->size());
 
     // Iterate over the layers in reverse order
-    for(int nLayer = nn_->size()-1; nLayer > 0; --nLayer)
+    for(unsigned int nLayer = nn_->size()-1; nLayer > 0; --nLayer)
     {
         if(nLayer == nn_->size()-1)
         {
@@ -143,7 +143,7 @@ int NeuralNetworkTrainer::trainNetwork()
         }
     }
 
-    int nUpdates = nn_->updateWeights();
+    unsigned int nUpdates = nn_->updateWeights();
     ++nTrainings_;
 
     return nUpdates;
@@ -161,7 +161,7 @@ float NeuralNetworkTrainer::calculateWeight(    float weight, float err,
 
 void NeuralNetworkTrainer::updateWeights(   std::vector<Neuron>& layer, 
                                             std::vector<Neuron>& prevLayer,
-                                            int nNeuron,
+                                            unsigned int nNeuron,
                                             std::vector<float> errors)
 {
     

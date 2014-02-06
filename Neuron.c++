@@ -42,10 +42,10 @@ float Neuron::updateState()
 
 }
 
-int Neuron::updateWeights()
+unsigned int Neuron::updateWeights()
 {
 
-    int nWeights = 0;
+    unsigned int nWeights = 0;
 
     if(inputSynapses.size() == 0)
     {
@@ -62,7 +62,7 @@ int Neuron::updateWeights()
 
 }
 
-Neuron::InputSynapse& Neuron::operator[](int nSynapse)
+Neuron::InputSynapse& Neuron::operator[](unsigned int nSynapse)
 {
 
     return inputSynapses[nSynapse];

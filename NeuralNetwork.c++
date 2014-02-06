@@ -12,7 +12,7 @@ NeuralNetwork::NeuralNetwork() :    inputNeurons_(0), outputNeurons_(0),
                                     inputValues_(0), outputValues_(0),
                                     nConnections_(0), nNeurons_(0) {}
 
-NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer, 
+NeuralNetwork::NeuralNetwork(   std::vector<unsigned int> nNeuronsPerLayer, 
                                 float weight) :
                                 neurons_(0), inputValues_(0),
                                 outputValues_(0), nConnections_(0),
@@ -28,7 +28,7 @@ NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer,
 
 }
 
-NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer, 
+NeuralNetwork::NeuralNetwork(   std::vector<unsigned int> nNeuronsPerLayer, 
                                 float weight, Neuron::Type type) :
                                 neurons_(0), inputValues_(0),
                                 outputValues_(0), nConnections_(0),
@@ -44,7 +44,7 @@ NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer,
 
 }
 
-NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) :
+NeuralNetwork::NeuralNetwork(std::vector<unsigned int> nNeuronsPerLayer) :
                                 neurons_(0), inputValues_(0),
                                 outputValues_(0), nConnections_(0),
                                 nNeurons_(0), type_(Neuron::Type::TYPE_SIGMOID)
@@ -59,7 +59,7 @@ NeuralNetwork::NeuralNetwork(std::vector<int> nNeuronsPerLayer) :
 
 }
 
-NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer, 
+NeuralNetwork::NeuralNetwork(   std::vector<unsigned int> nNeuronsPerLayer, 
                                 Neuron::Type type) :
                                 neurons_(0), inputValues_(0),
                                 outputValues_(0), nConnections_(0),
@@ -75,8 +75,9 @@ NeuralNetwork::NeuralNetwork(   std::vector<int> nNeuronsPerLayer,
 
 }
 
-int NeuralNetwork::createNeurons(   std::vector<int> nNeuronsPerLayer, 
-                                    Neuron::Type type)
+unsigned int NeuralNetwork::createNeurons(  std::vector<unsigned int> 
+                                            nNeuronsPerLayer, 
+                                            Neuron::Type type)
 {
     
     BOOST_LOG_TRIVIAL(info) << "Creating new NeuralNetwork";
@@ -89,11 +90,11 @@ int NeuralNetwork::createNeurons(   std::vector<int> nNeuronsPerLayer,
     }
     BOOST_LOG_TRIVIAL(info) << "\tArchitecture of the network: " 
                             << architecture.str();
-    int nNeurons = 0;
+    unsigned int nNeurons = 0;
 
     neurons_.resize(nNeuronsPerLayer.size());
 
-    int nLayer = 0;
+    unsigned int nLayer = 0;
 
     for(nLayer = 0; nLayer < nNeuronsPerLayer.size(); ++nLayer)
     {
@@ -122,11 +123,11 @@ int NeuralNetwork::createNeurons(   std::vector<int> nNeuronsPerLayer,
 
 }
 
-int NeuralNetwork::connectNetwork(float weight)
+unsigned int NeuralNetwork::connectNetwork(float weight)
 {
 
-    int nInputSynapses = 0;
-    int nLayer = 0;
+    unsigned int nInputSynapses = 0;
+    unsigned int nLayer = 0;
     float weight_ = weight;
 
     if(weight == 0)
@@ -174,7 +175,7 @@ int NeuralNetwork::connectNetwork(float weight)
         ++nLayer;
     }
 
-    int nSynapse = 0;
+    unsigned int nSynapse = 0;
     nLayer = 0;
 
     for(auto& layer: neurons_)
@@ -199,7 +200,7 @@ int NeuralNetwork::connectNetwork(float weight)
         ++nLayer;
     }
 
-    int nNeuron = 0;
+    unsigned int nNeuron = 0;
 
     // Resize inputValues_ vector and connect the pointers to the input neurons
     inputValues_.resize(inputNeurons_->size());
@@ -244,10 +245,10 @@ float NeuralNetwork::updateState()
 
 }
 
-int NeuralNetwork::updateWeights()
+unsigned int NeuralNetwork::updateWeights()
 {
 
-    int nWeights = 0;
+    unsigned int nWeights = 0;
     size_t nLayer = 0;
 
     for(auto& layer: neurons_)
@@ -267,7 +268,7 @@ int NeuralNetwork::updateWeights()
 
 }
 
-int NeuralNetwork::getConnections()
+unsigned int NeuralNetwork::getConnections()
 {
 
     return nConnections_;
@@ -280,9 +281,9 @@ std::vector<std::vector<std::vector<float> > > NeuralNetwork::getWeights()
 
     std::vector<std::vector<std::vector<float> > > state(neurons_.size());
 
-    int nLayer = 0;
-    int nNeuron = 0;
-    int nSynapse = 0;
+    unsigned int nLayer = 0;
+    unsigned int nNeuron = 0;
+    unsigned int nSynapse = 0;
 
     for(auto& layer: neurons_)
     {
@@ -320,9 +321,9 @@ std::vector<std::vector<std::vector<float> > > NeuralNetwork::getValues()
 
     std::vector<std::vector<std::vector<float> > > values(neurons_.size());
 
-    int nLayer = 0;
-    int nNeuron = 0;
-    int nSynapse = 0;
+    unsigned int nLayer = 0;
+    unsigned int nNeuron = 0;
+    unsigned int nSynapse = 0;
 
     for(auto& layer: neurons_)
     {
@@ -356,9 +357,9 @@ std::vector<std::vector<float> > NeuralNetwork::getState()
 
     std::vector<std::vector<float> > state(neurons_.size());
 
-    int nLayer = 0;
-    int nNeuron = 0;
-    int nSynapse = 0;
+    unsigned int nLayer = 0;
+    unsigned int nNeuron = 0;
+    unsigned int nSynapse = 0;
 
     for(auto& layer: neurons_)
     {
@@ -414,7 +415,7 @@ std::vector<float> NeuralNetwork::getOutput()
 
 }
 
-int NeuralNetwork::getInputSize()
+unsigned int NeuralNetwork::getInputSize()
 {
 
     if(inputNeurons_ == nullptr)
@@ -428,7 +429,7 @@ int NeuralNetwork::getInputSize()
 
 }
 
-int NeuralNetwork::getOutputSize()
+unsigned int NeuralNetwork::getOutputSize()
 {
 
     if(outputNeurons_ == nullptr)

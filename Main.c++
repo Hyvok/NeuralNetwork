@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <chrono>
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
@@ -28,13 +29,13 @@ int main(int argc, char *argv[])
 
     po::options_description config("Options in config file and command-line");
     config.add_options()
-        ("network,n", po::value<std::vector<int> >()->multitoken(), 
+        ("network,n", po::value<std::vector<unsigned int> >()->multitoken(), 
             "number of hidden neurons per layer, "
             "input and output layers sizes are based on input data)")
         ("activation,a", po::value<std::string>(), 
             "activation function of the neurons")
         ("training,t", po::value<std::string>(), "training algorithm")
-        ("iterations,i", po::value<int>(), "number of iterations of training")
+        ("iterations,i", po::value<unsigned int>(), "number of iterations of training")
         ("input-file", po::value<std::vector<std::string> >(), "input file for training")
         ("learning_rate", po::value<float>()->default_value(DEFAULT_LEARNING_RATE), 
             "learning rate for back-propagation");
@@ -53,7 +54,7 @@ int main(int argc, char *argv[])
     po::store(po::command_line_parser(argc, argv).options(cmdLineOptions).positional(pd).run(), vm);
     po::notify(vm);
     
-    std::vector<int> nNeurons(0);
+    std::vector<unsigned int> nNeurons(0);
 
     BOOST_LOG_TRIVIAL(info) << "Configuration:";
 
@@ -81,7 +82,7 @@ int main(int argc, char *argv[])
     if(vm.count("iterations"))
     {
         BOOST_LOG_TRIVIAL(info) << "\tNumber of training iterations set to: "
-                                << vm["iterations"].as<int>();
+                                << vm["iterations"].as<unsigned int>();
     }
     else
     {
@@ -107,15 +108,15 @@ int main(int argc, char *argv[])
     // TODO: network option is too greedy, implement validator
     if(vm.count("network")) 
     {
-        nNeurons = vm["network"].as<std::vector<int> >();
+        nNeurons = vm["network"].as<std::vector<unsigned int> >();
 
         std::stringstream ss;
         
         ss << "\tNumber of hidden neurons was set to ";
 
-        for(size_t n = 0; n < vm["network"].as<std::vector<int> >().size(); ++n)
+        for(size_t n = 0; n < vm["network"].as<std::vector<unsigned int> >().size(); ++n)
         {
-            ss << vm["network"].as<std::vector<int> >()[n] << " ";
+            ss << vm["network"].as<std::vector<unsigned int> >()[n] << " ";
         }
 
         BOOST_LOG_TRIVIAL(info) << ss.str();
@@ -159,25 +160,48 @@ int main(int argc, char *argv[])
 
     // Train network
     BOOST_LOG_TRIVIAL(info) << "Starting network training...";
+    auto trainingStart = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+
+    size_t nWeights = 0;
     // Disable cursor
     system("setterm -cursor off");
-    for(size_t i = 0; i < vm["iterations"].as<int>() + 1; ++i)
+    for(size_t i = 0; i < vm["iterations"].as<unsigned int>() + 1; ++i)
     {
         // Print info every 100 iterations, otherwise printing will suck a lot
         // of CPU
         if(i % 100 == 0)
         {
             std::cout.flush();
-            std::cout << "\rIteration " << i << "/" << vm["iterations"].as<int>();
+            std::cout   << "\rIteration " << i << "/" 
+                        << vm["iterations"].as<unsigned int>();
         }
-        trainer.trainNetwork();
+        nWeights += trainer.trainNetwork();
     }
+    auto trainingStop = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+
     std::cout << std::endl;
     // Enable cursor
     system("setterm -cursor on");
+
+    // Statistics of the training
+    float trainingTime = (trainingStop - trainingStart) / 1000.0;
+
     BOOST_LOG_TRIVIAL(info) << "Network training finished...";
 
+    BOOST_LOG_TRIVIAL(info) << "Performance statistics:";
+    BOOST_LOG_TRIVIAL(info) << "\tRunning " << vm["iterations"].as<unsigned int>() 
+                            << " iterations took " << trainingTime
+                            << " seconds which is " 
+                            << (vm["iterations"].as<unsigned int>() / trainingTime)
+                            << " iterations/s";
+    BOOST_LOG_TRIVIAL(info) << "\tUpdated " << nWeights 
+                            << " weights at a rate of "
+                            << (nWeights / trainingTime) << " weights/s";
+
     // After training print out the network outputs with all the inputs
+    // TODO: gather and print statistics of the training
     BOOST_LOG_TRIVIAL(info) << "Final test results:";
     for(size_t n = 0; n < imageMap.size(); ++n)
     {

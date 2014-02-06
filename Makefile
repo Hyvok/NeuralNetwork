@@ -1,5 +1,6 @@
-CC=			clang++
-CFLAGS=		-Wall -std=c++11
+CC=			g++
+OPTIM=		-O2
+CFLAGS=		$(OPTIM) -Wall -std=c++11
 DEP=		-lpthread -lboost_log -DBOOST_LOG_DYN_LINK -lpng \
 			-lboost_program_options
 TEST_DEP=	$(DEP) -lboost_unit_test_framework -DBOOST_TEST_DYN_LINK

@@ -38,7 +38,7 @@ class NeuralNetworkTrainer
 
         // Do one iteration of training the network using back-propagation
         // algorithm, returns number of weights updated
-        int trainNetwork();
+        unsigned int trainNetwork();
 
         // Set learning rate, defaults to LEARNING_RATE if not explicitly set
         // TODO: fix this to be specified in the constructor
@@ -49,7 +49,8 @@ class NeuralNetworkTrainer
         // Function for iterating over a layer and updating the weights for a
         // network with neurons with linear activation function
         void updateWeights( std::vector<Neuron>& layer, 
-                            std::vector<Neuron>& prevLayer, int nNeuron, 
+                            std::vector<Neuron>& prevLayer, 
+                            unsigned int nNeuron, 
                             std::vector<float> errors);
 
         // Function for calculating the desired weight change for a network
@@ -63,7 +64,7 @@ class NeuralNetworkTrainer
         std::vector<float> input_;
         std::vector<float> output_;
 
-        int nTrainings_;
+        unsigned int nTrainings_;
 
         float learningRate_;
 

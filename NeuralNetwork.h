@@ -22,20 +22,21 @@ class NeuralNetwork
         // synapses. If weight is 0 then the weights will be randomly chosen
         // between -MAX_RANDOM_WEIGHT/2 and MAX_RANDOM_WEIGHT/2, neuron type
         // defaults to TYPE_SIGMOID
-        NeuralNetwork(std::vector<int> nNeuronsPerLayer, float weight);
+        NeuralNetwork(std::vector<unsigned int> nNeuronsPerLayer, float weight);
 
         // Constructor, nNeuronsPerLayer specifies how many neurons
         // per layer there is and weight is the default weight for all the
         // synapses. If weight is 0 then the weights will be randomly chosen
         // between -MAX_RANDOM_WEIGHT/2 and MAX_RANDOM_WEIGHT/2, type specifies
         // the type of neuron (TYPE_LINEAR or TYPE_SIGMOID)
-        NeuralNetwork(  std::vector<int> nNeuronsPerLayer, float weight, 
-                        Neuron::Type type);
+        NeuralNetwork(  std::vector<unsigned int> nNeuronsPerLayer, 
+                        float weight, Neuron::Type type);
 
         // Constructors without weight option, weight defaults to random values
-        NeuralNetwork(std::vector<int> nNeuronsPerLayer);
+        NeuralNetwork(std::vector<unsigned int> nNeuronsPerLayer);
 
-        NeuralNetwork(std::vector<int> nNeuronsPerLayer, Neuron::Type type);
+        NeuralNetwork(  std::vector<unsigned int> nNeuronsPerLayer, 
+                        Neuron::Type type);
 
         // Calculates the new state of the network,
         // returns the total amount of change in output synapses
@@ -43,10 +44,10 @@ class NeuralNetwork
 
         // Updates the weights of the network to newWeight,
         // returns the amount of weights updated
-        int updateWeights();
+        unsigned int updateWeights();
 
         // Returns number of connections in the network
-        int getConnections();
+        unsigned int getConnections();
 
         // Returns weights of the synapses in the network
         std::vector<std::vector<std::vector<float> > > getWeights();
@@ -62,10 +63,10 @@ class NeuralNetwork
         bool setInput(std::vector<float> input);
 
         // Get number of input neurons
-        int getInputSize();
+        unsigned int getInputSize();
 
         // Get number of output neurons
-        int getOutputSize();
+        unsigned int getOutputSize();
 
         // Get output from the network
         std::vector<float> getOutput();
@@ -85,10 +86,11 @@ class NeuralNetwork
     private:
 
         // Creates the neurons, returns number of neurons
-        int createNeurons(std::vector<int> nNeuronsPerLayer, Neuron::Type type);
+        unsigned int createNeurons( std::vector<unsigned int> nNeuronsPerLayer, 
+                                    Neuron::Type type);
 
         // Connects network and returns number of connections
-        int connectNetwork(float weight);
+        unsigned int connectNetwork(float weight);
 
         std::vector<std::vector<Neuron> > neurons_;
         std::vector<Neuron>* inputNeurons_;
@@ -97,8 +99,8 @@ class NeuralNetwork
         std::vector<float> inputValues_;
         std::vector<float*> outputValues_;
 
-        int nConnections_;
-        int nNeurons_;
+        unsigned int nConnections_;
+        unsigned int nNeurons_;
         Neuron::Type type_;
 
 };
