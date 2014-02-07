@@ -1,4 +1,4 @@
-CC=			g++
+CC=			clang++
 OPTIM=		-O2
 CFLAGS=		$(OPTIM) -Wall -std=c++11
 DEP=		-lpthread -lboost_log -DBOOST_LOG_DYN_LINK -lpng \

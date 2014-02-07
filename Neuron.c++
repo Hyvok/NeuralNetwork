@@ -69,14 +69,14 @@ Neuron::InputSynapse& Neuron::operator[](unsigned int nSynapse)
 
 }
 
-size_t Neuron::size()
+size_t Neuron::size() const
 {
 
     return inputSynapses.size();
 
 }
 
-float Neuron::out()
+float Neuron::out() const
 {
 
     return outputSynapse.value;

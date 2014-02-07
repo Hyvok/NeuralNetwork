@@ -131,9 +131,8 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
                                 (outputError[nLayer+1][nPrev] 
                                 * (*nn_)[nLayer+1][nPrev][n].weight); 
                     }
-                }
                 outputError[nLayer].push_back(err);
-                err = 0;
+                }
             }
             for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
             {
@@ -151,8 +150,9 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
 }
 
 // TODO: check if it is worth converting this to inline
-float NeuralNetworkTrainer::calculateWeight(    float weight, float err, 
-                                                float out)
+float NeuralNetworkTrainer::calculateWeight(    float const& weight, 
+                                                float const& err, 
+                                                float const& out)
 {
 
     return (err * out);
@@ -160,9 +160,9 @@ float NeuralNetworkTrainer::calculateWeight(    float weight, float err,
 }
 
 void NeuralNetworkTrainer::updateWeights(   std::vector<Neuron>& layer, 
-                                            std::vector<Neuron>& prevLayer,
-                                            unsigned int nNeuron,
-                                            std::vector<float> errors)
+                                            std::vector<Neuron> const& prevLayer,
+                                            unsigned int const& nNeuron,
+                                            std::vector<float> const& errors)
 {
     
     float err = 0;

@@ -268,7 +268,7 @@ unsigned int NeuralNetwork::updateWeights()
 
 }
 
-unsigned int NeuralNetwork::getConnections()
+unsigned int NeuralNetwork::getConnections() const
 {
 
     return nConnections_;
@@ -276,7 +276,7 @@ unsigned int NeuralNetwork::getConnections()
 }
 
 // TODO: combine getter functions with templates
-std::vector<std::vector<std::vector<float> > > NeuralNetwork::getWeights()
+std::vector<std::vector<std::vector<float> > > NeuralNetwork::getWeights() const
 {
 
     std::vector<std::vector<std::vector<float> > > state(neurons_.size());
@@ -316,7 +316,7 @@ std::vector<std::vector<std::vector<float> > > NeuralNetwork::getWeights()
 
 }
 
-std::vector<std::vector<std::vector<float> > > NeuralNetwork::getValues()
+std::vector<std::vector<std::vector<float> > > NeuralNetwork::getValues() const
 {
 
     std::vector<std::vector<std::vector<float> > > values(neurons_.size());
@@ -352,7 +352,7 @@ std::vector<std::vector<std::vector<float> > > NeuralNetwork::getValues()
 
 }
 
-std::vector<std::vector<float> > NeuralNetwork::getState()
+std::vector<std::vector<float> > NeuralNetwork::getState() const
 {
 
     std::vector<std::vector<float> > state(neurons_.size());
@@ -401,7 +401,7 @@ bool NeuralNetwork::setInput(std::vector<float> input)
 
 }
 
-std::vector<float> NeuralNetwork::getOutput()
+std::vector<float> NeuralNetwork::getOutput() const
 {
 
     std::vector<float> output(outputValues_.size());
@@ -415,7 +415,7 @@ std::vector<float> NeuralNetwork::getOutput()
 
 }
 
-unsigned int NeuralNetwork::getInputSize()
+unsigned int NeuralNetwork::getInputSize() const
 {
 
     if(inputNeurons_ == nullptr)
@@ -429,7 +429,7 @@ unsigned int NeuralNetwork::getInputSize()
 
 }
 
-unsigned int NeuralNetwork::getOutputSize()
+unsigned int NeuralNetwork::getOutputSize() const
 {
 
     if(outputNeurons_ == nullptr)
@@ -450,14 +450,14 @@ std::vector<Neuron>& NeuralNetwork::operator[](size_t nLayer)
 
 }
 
-size_t NeuralNetwork::size()
+size_t NeuralNetwork::size() const
 {
 
     return neurons_.size();
 
 }
 
-Neuron::Type NeuralNetwork::getNeuronType()
+Neuron::Type NeuralNetwork::getNeuronType() const
 {
 
     return type_;

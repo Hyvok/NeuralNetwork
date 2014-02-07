@@ -25,10 +25,10 @@ class Neuron
         unsigned int updateWeights();
 
         // Get the size (=number) of inputSynapses
-        size_t size();
+        size_t size() const;
 
         // Return value of the output synapse
-        float out();
+        float out() const;
 
         class InputSynapse 
         {

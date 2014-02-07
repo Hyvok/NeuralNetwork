@@ -47,38 +47,38 @@ class NeuralNetwork
         unsigned int updateWeights();
 
         // Returns number of connections in the network
-        unsigned int getConnections();
+        unsigned int getConnections() const;
 
         // Returns weights of the synapses in the network
-        std::vector<std::vector<std::vector<float> > > getWeights();
+        std::vector<std::vector<std::vector<float> > > getWeights() const;
 
         // Returns input values of the synapses in the network
-        std::vector<std::vector<std::vector<float> > > getValues();
+        std::vector<std::vector<std::vector<float> > > getValues() const;
 
         // Returns states of the output synapses in the network
-        std::vector<std::vector<float> > getState();
+        std::vector<std::vector<float> > getState() const;
 
         // Give input to the network and updateState(),
         // returns true if it is accepted
         bool setInput(std::vector<float> input);
 
         // Get number of input neurons
-        unsigned int getInputSize();
+        unsigned int getInputSize() const;
 
         // Get number of output neurons
-        unsigned int getOutputSize();
+        unsigned int getOutputSize() const;
 
         // Get output from the network
-        std::vector<float> getOutput();
+        std::vector<float> getOutput() const;
 
         // Operator [] for accessing the layers of the neural network
         std::vector<Neuron>& operator[](size_t nLayer);
 
         // Return how many layers the network has
-        size_t size();
+        size_t size() const;
 
         // Return Type of the neurons in the network
-        Neuron::Type getNeuronType();
+        Neuron::Type getNeuronType() const;
 
         // Return last layer of the network
         std::vector<Neuron>& back();

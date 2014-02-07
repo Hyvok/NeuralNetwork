@@ -49,13 +49,14 @@ class NeuralNetworkTrainer
         // Function for iterating over a layer and updating the weights for a
         // network with neurons with linear activation function
         void updateWeights( std::vector<Neuron>& layer, 
-                            std::vector<Neuron>& prevLayer, 
-                            unsigned int nNeuron, 
-                            std::vector<float> errors);
+                            std::vector<Neuron> const& prevLayer, 
+                            unsigned int const& nNeuron, 
+                            std::vector<float> const& errors);
 
         // Function for calculating the desired weight change for a network
         // with neurons with a linear activation function
-        float calculateWeight(float weight, float err, float out);
+        float calculateWeight(  float const& weight, float const& err, 
+                                float const& out);
 
         NeuralNetwork* nn_;
         Neuron::Type type_;
