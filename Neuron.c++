@@ -47,7 +47,7 @@ unsigned int Neuron::updateWeights()
 
     unsigned int nWeights = 0;
 
-    if(inputSynapses.size() == 0)
+    if(inputSynapses.empty())
     {
         return 0;
     }

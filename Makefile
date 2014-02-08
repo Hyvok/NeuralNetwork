@@ -8,10 +8,10 @@ LDFLAGS=	-v
 TARGET=		NeuralNetwork
 MAIN=		Main.c++
 SRC=		Neuron.c++ NeuralNetwork.c++ NeuralNetworkTrainer.c++ \
-			NnImageMap.c++
+			NnImageMap.c++ StatusBar.c++
 TEST_SRC=	$(SRC) ./tests/MainTest.c++ ./tests/NeuronTest.c++ \
 			./tests/NeuralNetworkTest.c++ ./tests/NeuralNetworkTrainerTest.c++ \
-			./tests/NnImageMapTest.c++
+			./tests/NnImageMapTest.c++ ./tests/StatusBarTest.c++
 
 all:
 	$(CC) $(SRC) $(MAIN) $(CFLAGS) $(DEP) -o $(TARGET)

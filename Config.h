@@ -8,6 +8,7 @@
 #define DEFAULT_TRAINING                BACKPROP
 #define DEFAULT_ACTIVATION_FUNCTION     TYPE_SIGMOID
 #define DEFAULT_LEARNING_RATE           0.1
+#define DEFAULT_STATUS_BAR_REFRESH      50
 
 // Helper macros
 #define QUOTE(x) #x

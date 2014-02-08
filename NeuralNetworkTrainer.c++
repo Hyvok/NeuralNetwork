@@ -131,6 +131,8 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
                                 (outputError[nLayer+1][nPrev] 
                                 * (*nn_)[nLayer+1][nPrev][n].weight); 
                     }
+                // Training works (maybe even better) when this is outside the
+                // for loop!?
                 outputError[nLayer].push_back(err);
                 }
             }

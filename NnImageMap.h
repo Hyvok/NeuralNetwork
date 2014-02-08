@@ -24,13 +24,13 @@ class NnImageMap
         NnImageMap(std::vector<std::string> fileNames);
 
         // Return number of training cases in this NnImageMap
-        size_t size();
+        size_t size() const;
 
         // Return LARGEST input vector size
-        size_t inSize();
+        size_t inSize() const;
 
         // Return output vector size
-        size_t outSize();
+        size_t outSize() const;
 
         // Data container class for the data
         class NnImageMapData
@@ -40,13 +40,15 @@ class NnImageMap
                 
                 NnImageMapData();
     
-                NnImageMapData( std::string trainingCase, std::vector<float> input, std::vector<float>);
+                NnImageMapData( std::string trainingCase, 
+                                std::vector<float> input, 
+                                std::vector<float>);
 
                 // Return output vector
-                std::vector<float> out();
+                std::vector<float> out() const;
 
                 // Return the input vector
-                std::vector<float> in();
+                std::vector<float> in() const;
 
                 // Name for the training case, currently filename
                 std::string trainingCase;
@@ -58,11 +60,11 @@ class NnImageMap
                 std::vector<float> output;
 
                 // Return desired output neuron values as a std::string
-                std::string getOutStr();
+                std::string getOutStr() const;
 
         };
 
-        NnImageMap::NnImageMapData operator[](size_t n);
+        NnImageMap::NnImageMapData& operator[](size_t n);
 
     private:
 
@@ -88,8 +90,9 @@ class NnImageMap
         void mapOutputs();
 
         std::vector<NnImageMap::NnImageMapData> mappedImages_;
-        int nMappedImages_;
-        int nLargestInput_;
+        unsigned int nMappedImages_;
+        unsigned int nInput_;
+        unsigned int nOutput_;
 
 };
 

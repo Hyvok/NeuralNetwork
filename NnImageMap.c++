@@ -7,7 +7,6 @@
 #include <boost/gil/extension/io/png_dynamic_io.hpp>
 #include "NnImageMap.h"
 
-using namespace boost::gil;
 
 NnImageMap::NnImageMapData::NnImageMapData() :  trainingCase(""), input(0), 
                                                 output(0) {}
@@ -19,11 +18,14 @@ NnImageMap::NnImageMapData::NnImageMapData( std::string trainingCase,
                             output(output) {}
 
 NnImageMap::NnImageMap() :  mappedImages_(0), nMappedImages_(0), 
-                            nLargestInput_(0) {}
+                            nInput_(0), nOutput_(0) {}
 
 NnImageMap::NnImageMap( std::vector<std::string> fileNames) : 
-                        mappedImages_(0), nMappedImages_(0), nLargestInput_(0)
+                        mappedImages_(0), nMappedImages_(0), nInput_(0), 
+                        nOutput_(0)
 {
+    
+    using namespace boost::gil;
 
     // Currently hardcoded to BW images
     gray8_image_t img;
@@ -82,7 +84,7 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
         error = false;
     }
 
-    nLargestInput_ = nMaxPixels;
+    nInput_ = nMaxPixels;
 
     // Fix the sizes of the output vectors in mappedImages_ after we have loaded
     // all the images and we know the total amount of images
@@ -93,7 +95,7 @@ NnImageMap::NnImageMap( std::vector<std::string> fileNames) :
 
 }
 
-NnImageMap::NnImageMapData NnImageMap::operator[](size_t n)
+NnImageMap::NnImageMapData& NnImageMap::operator[](size_t n)
 {
 
     return mappedImages_[n];
@@ -103,18 +105,16 @@ NnImageMap::NnImageMapData NnImageMap::operator[](size_t n)
 void NnImageMap::mapOutputs()
 {
 
-    int nMappedImage = 0;
-
     for(auto& mappedImage: mappedImages_)
     {
         mappedImage.output.resize(nMappedImages_);
-        mappedImage.output[nMappedImage] = 1;
-        ++nMappedImage;
+        mappedImage.output[nOutput_] = 1;
+        ++nOutput_;
     }
 
 }
 
-size_t NnImageMap::size()
+size_t NnImageMap::size() const
 {
 
     return mappedImages_.size();
@@ -122,7 +122,7 @@ size_t NnImageMap::size()
 }
 
 // TODO: fix these, do not work with empty mappedImages_!
-size_t NnImageMap::inSize()
+size_t NnImageMap::inSize() const
 {
 
     size_t largestSize = 0;
@@ -140,28 +140,28 @@ size_t NnImageMap::inSize()
 }
 
 // TODO: fix these, do not work with empty mappedImages_!
-size_t NnImageMap::outSize()
+size_t NnImageMap::outSize() const
 {
 
-    return mappedImages_[0].out().size();
+    return nOutput_;
 
 }
 
-std::vector<float> NnImageMap::NnImageMapData::out()
+std::vector<float> NnImageMap::NnImageMapData::out() const
 {
 
     return output;
 
 }
 
-std::vector<float> NnImageMap::NnImageMapData::in()
+std::vector<float> NnImageMap::NnImageMapData::in() const
 {
 
     return input;
 
 }
 
-std::string NnImageMap::NnImageMapData::getOutStr()
+std::string NnImageMap::NnImageMapData::getOutStr() const
 {
 
     std::stringstream ss;

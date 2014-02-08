@@ -9,6 +9,7 @@
 #include "NeuralNetworkTrainer.h"
 #include "NeuralNetwork.h"
 #include "NnImageMap.h"
+#include "StatusBar.h"
 #include "Config.h" 
 
 namespace po = boost::program_options;
@@ -164,22 +165,22 @@ int main(int argc, char *argv[])
         std::chrono::system_clock::now().time_since_epoch()).count();
 
     size_t nWeights = 0;
+
+    StatusBar bar(  std::chrono::duration<unsigned int, 
+                    std::milli>(DEFAULT_STATUS_BAR_REFRESH));
+    bar.add(    "Iterations ", StatusBar::VALUE, "/"  + 
+                std::to_string(vm["iterations"].as<unsigned int>()));
+    bar.show();
     // Disable cursor
     system("setterm -cursor off");
     for(size_t i = 0; i < vm["iterations"].as<unsigned int>() + 1; ++i)
     {
-        // Print info every 100 iterations, otherwise printing will suck a lot
-        // of CPU
-        if(i % 100 == 0)
-        {
-            std::cout.flush();
-            std::cout   << "\rIteration " << i << "/" 
-                        << vm["iterations"].as<unsigned int>();
-        }
         nWeights += trainer.trainNetwork();
+        bar["Iterations "] = std::to_string(i); 
     }
     auto trainingStop = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::system_clock::now().time_since_epoch()).count();
+    bar.close();
 
     std::cout << std::endl;
     // Enable cursor
