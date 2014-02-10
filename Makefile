@@ -7,10 +7,10 @@ TEST_DEP=	$(DEP) -lboost_unit_test_framework -DBOOST_TEST_DYN_LINK
 LDFLAGS=	-v
 TARGET=		NeuralNetwork
 MAIN=		Main.c++
-SRC=		Neuron.c++ NeuralNetwork.c++ NeuralNetworkTrainer.c++ \
+SRC=		Neuron.c++ NeuralNetwork.c++ NnTrainer.c++ \
 			NnImageMap.c++ StatusBar.c++
 TEST_SRC=	$(SRC) ./tests/MainTest.c++ ./tests/NeuronTest.c++ \
-			./tests/NeuralNetworkTest.c++ ./tests/NeuralNetworkTrainerTest.c++ \
+			./tests/NeuralNetworkTest.c++ ./tests/NnTrainerTest.c++ \
 			./tests/NnImageMapTest.c++ ./tests/StatusBarTest.c++
 
 all:

@@ -6,7 +6,7 @@
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
 #include <boost/log/trivial.hpp>
-#include "NeuralNetworkTrainer.h"
+#include "NnTrainer.h"
 #include "NeuralNetwork.h"
 #include "NnImageMap.h"
 #include "StatusBar.h"
@@ -156,8 +156,8 @@ int main(int argc, char *argv[])
 
     NeuralNetwork network(nNeurons);
 
-    NeuralNetworkTrainer trainer(   network, imageMap, 
-                                    vm["learning_rate"].as<float>());
+    NnTrainer trainer(  network, imageMap, 
+                        vm["learning_rate"].as<float>());
 
     // Train network
     BOOST_LOG_TRIVIAL(info) << "Starting network training...";

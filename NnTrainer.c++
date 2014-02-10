@@ -5,29 +5,22 @@
 #include <boost/log/trivial.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include "NnImageMap.h"
-#include "NeuralNetworkTrainer.h"
+#include "NnTrainer.h"
 #include "NeuralNetwork.h"
 
-NeuralNetworkTrainer::NeuralNetworkTrainer() :  nn_(0), imageMap_(0), input_(0),
-                                                output_(0), nTrainings_(0), 
-                                                learningRate_(0) {}
+NnTrainer::NnTrainer() :    nn_(0), imageMap_(0), input_(0), output_(0), 
+                            nTrainings_(0), learningRate_(0) {}
 
-NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
-                                            float learningRate) : 
-                                            nn_(&network), 
-                                            type_(nn_->getNeuronType()), imageMap_(0),
-                                            input_(0), output_(0), 
-                                            nTrainings_(0),
-                                            learningRate_(learningRate) {}
+NnTrainer::NnTrainer( NeuralNetwork& network, float learningRate) : 
+                        nn_(&network), type_(nn_->getNeuronType()), 
+                        imageMap_(0), input_(0), output_(0), nTrainings_(0),
+                        learningRate_(learningRate) {}
         
-NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network, 
-                                            std::vector<float> input,
-                                            float learningRate) :
-                                            nn_(&network),
-                                            type_(nn_->getNeuronType()), 
-                                            imageMap_(0), input_(input), 
-                                            output_(0), nTrainings_(0),
-                                            learningRate_(learningRate)
+NnTrainer::NnTrainer(   NeuralNetwork& network, std::vector<float> input,
+                        float learningRate) :
+                            nn_(&network), type_(nn_->getNeuronType()), 
+                            imageMap_(0), input_(input), output_(0), 
+                            nTrainings_(0), learningRate_(learningRate)
 {
 
     nn_->setInput(input);
@@ -36,15 +29,12 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
 }
 
 
-NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network, 
-                                            std::vector<float> input,
-                                            std::vector<float> output,
-                                            float learningRate) :
-                                            nn_(&network), 
-                                            type_(nn_->getNeuronType()), 
-                                            imageMap_(0), input_(input), 
-                                            output_(output), nTrainings_(0),
-                                            learningRate_(learningRate)
+NnTrainer::NnTrainer(   NeuralNetwork& network, std::vector<float> input,
+                        std::vector<float> output, float learningRate) :
+                            nn_(&network), type_(nn_->getNeuronType()), 
+                            imageMap_(0), input_(input), 
+                            output_(output), nTrainings_(0),
+                            learningRate_(learningRate)
 {
 
     nn_->setInput(input);
@@ -52,14 +42,12 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
 
 }
 
-NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
-                                            NnImageMap& imageMap,
-                                            float learningRate) :
-                                            nn_(&network), 
-                                            type_(nn_->getNeuronType()), 
-                                            imageMap_(&imageMap), input_(0), 
-                                            output_(0), nTrainings_(0),
-                                            learningRate_(learningRate)
+NnTrainer::NnTrainer(   NeuralNetwork& network, NnImageMap& imageMap,
+                        float learningRate) :
+                            nn_(&network), type_(nn_->getNeuronType()), 
+                            imageMap_(&imageMap), input_(0), 
+                            output_(0), nTrainings_(0),
+                            learningRate_(learningRate)
 {
 
     srand(time(NULL));
@@ -67,11 +55,10 @@ NeuralNetworkTrainer::NeuralNetworkTrainer( NeuralNetwork& network,
 }
 
 // TODO: split into smaller parts
-unsigned int NeuralNetworkTrainer::trainNetwork()
+unsigned int NnTrainer::trainNetwork()
 {
 
     float err = 0.0;
-    float outErr = 0.0;
 
     // Select random training case from imageMap_ and set input of the network 
     // to match it
@@ -91,9 +78,10 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
             {
                 if(type_ == Neuron::Type::TYPE_LINEAR)
                 {
-                    outErr =    ((*imageMap_)[nTrainingCase].out()[n] - 
+                    err =       ((*imageMap_)[nTrainingCase].out()[n] - 
                                 (*nn_)[nLayer][n].out());
-                    outputError[nLayer].push_back(outErr);
+                    outputError[nLayer].push_back(err);
+                    err = 0;
 
                     updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer - 1], n,
                             outputError[nLayer]);
@@ -101,11 +89,12 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
                 // TYPE_SIGMOID, default
                 else
                 {
-                    outErr =    (*nn_)[nLayer][n].out() * ((1.0 - 
+                    err =       (*nn_)[nLayer][n].out() * ((1.0 - 
                                 (*nn_)[nLayer][n].out()) * 
                                 ((*imageMap_)[nTrainingCase].out()[n] - 
                                 (*nn_)[nLayer][n].out()));
-                    outputError[nLayer].push_back(outErr);
+                    outputError[nLayer].push_back(err);
+                    err = 0;
 
                     updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer - 1], n,
                                     outputError[nLayer]);
@@ -147,20 +136,18 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
 
 }
 
-// TODO: check if it is worth converting this to inline
-float NeuralNetworkTrainer::calculateWeight(    float const& weight, 
-                                                float const& err, 
-                                                float const& out)
+float NnTrainer::calculateWeight(   float const& weight, float const& err, 
+                                    float const& out)
 {
 
     return (err * out);
 
 }
 
-void NeuralNetworkTrainer::updateWeights(   std::vector<Neuron>& layer, 
-                                            std::vector<Neuron> const& prevLayer,
-                                            unsigned int const& nNeuron,
-                                            std::vector<float> const& errors)
+void NnTrainer::updateWeights(  std::vector<Neuron>& layer, 
+                                std::vector<Neuron> const& prevLayer,
+                                unsigned int const& nNeuron,
+                                std::vector<float> const& errors)
 {
     
     float err = 0;
@@ -177,7 +164,7 @@ void NeuralNetworkTrainer::updateWeights(   std::vector<Neuron>& layer,
 
 }
 
-void NeuralNetworkTrainer::setLearningRate(float rate)
+void NnTrainer::setLearningRate(float rate)
 {
 
     this->learningRate_ = rate;

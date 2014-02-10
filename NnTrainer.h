@@ -7,34 +7,32 @@
 #include "Neuron.h"
 
 // TODO: implement validation set support
-class NeuralNetworkTrainer
+class NnTrainer
 {
 
     public:
 
-        NeuralNetworkTrainer();
+        NnTrainer();
 
-        // Constructor for constructing a NeuralNetworkTrainer to train
+        // Constructor for constructing a NnTrainer to train
         // network
-        NeuralNetworkTrainer(NeuralNetwork& network, float learningRate);
+        NnTrainer(NeuralNetwork& network, float learningRate);
 
-        // Constructor for constructing a NeuralNetworkTrainer to train
+        // Constructor for constructing a NnTrainer to train
         // network with input
-        NeuralNetworkTrainer(   NeuralNetwork& network, 
-                                std::vector<float> input,
-                                float learningRate);
+        NnTrainer(  NeuralNetwork& network, std::vector<float> input,
+                    float learningRate);
 
-        // Constructor for constructing a NeuralNetworkTrainer to train 
+        // Constructor for constructing a NnTrainer to train 
         // network with input and adjust networks weights based on
         // difference between input and desired output
-        NeuralNetworkTrainer(   NeuralNetwork& network, 
-                                std::vector<float> input,
-                                std::vector<float> output, float learningRate);
+        NnTrainer(  NeuralNetwork& network, std::vector<float> input,
+                    std::vector<float> output, float learningRate);
 
-        // Constructor for constructing a NeuralNetworkTrainer to train network
+        // Constructor for constructing a NnTrainer to train network
         // with input contained in imageMap
-        NeuralNetworkTrainer(   NeuralNetwork& network, NnImageMap& imageMap, 
-                                float learningRate);
+        NnTrainer(  NeuralNetwork& network, NnImageMap& imageMap, 
+                    float learningRate);
 
         // Do one iteration of training the network using back-propagation
         // algorithm, returns number of weights updated

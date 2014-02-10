@@ -1,24 +1,24 @@
 #include <iostream>
 #include <sstream>
 #include <boost/test/unit_test.hpp>
-#include "../NeuralNetworkTrainer.h"
+#include "../NnTrainer.h"
 #include "../NeuralNetwork.h"
 
 // TODO: make better tests
 BOOST_AUTO_TEST_CASE(neural_network_trainer_test)
 {
 
-    BOOST_TEST_MESSAGE("Testing NeuralNetworkTrainer with empty network...");
+    BOOST_TEST_MESSAGE("Testing NnTrainer with empty network...");
     NeuralNetwork emptyNetwork;
-    NeuralNetworkTrainer emptyTrainer(emptyNetwork);
+    NnTrainer emptyTrainer(emptyNetwork);
 
     //std::vector<int> normal = {3, 2, 1};
     std::vector<int> normal = {4, 3, 2, 1};
     NeuralNetwork testNetwork(normal, 0);
-    //NeuralNetworkTrainer testTrainer(testNetwork, {1, 0, 0}, {1});
-    NeuralNetworkTrainer testTrainer(testNetwork, {1, 0, 0, 0}, {1});
+    //NnTrainer testTrainer(testNetwork, {1, 0, 0}, {1});
+    NnTrainer testTrainer(testNetwork, {1, 0, 0, 0}, {1});
 
-    BOOST_TEST_MESSAGE("NeuralNetworkTrainer trainNetwork()...");
+    BOOST_TEST_MESSAGE("NnTrainer trainNetwork()...");
     BOOST_CHECK(testTrainer.trainNetwork() == 20);
 
     int nUpdates = 0;
