@@ -78,15 +78,16 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
     size_t nTrainingCase = rand() % (*imageMap_).size();
     nn_->setInput((*imageMap_)[nTrainingCase].in());
 
-    std::vector<std::vector<float> > outputError(nn_->size());
+    std::vector<std::vector<float> > outputError(nn_->layers());
 
     // Iterate over the layers in reverse order
-    for(unsigned int nLayer = nn_->size()-1; nLayer > 0; --nLayer)
+    for(unsigned int nLayer = nn_->layers()-1; nLayer > 0; --nLayer)
     {
-        if(nLayer == nn_->size()-1)
+        // Iterate through neurons in the layer
+        for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
         {
-            // Iterate through neurons in the layer
-            for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
+            // If we are in the last (=output) layer
+            if(nLayer == nn_->layers() - 1)
             {
                 if(type_ == Neuron::Type::TYPE_LINEAR)
                 {
@@ -94,8 +95,8 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
                                 (*nn_)[nLayer][n].out());
                     outputError[nLayer].push_back(outErr);
 
-                    updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
-                                    outputError[nLayer]);
+                    updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer - 1], n,
+                            outputError[nLayer]);
                 }
                 // TYPE_SIGMOID, default
                 else
@@ -106,39 +107,34 @@ unsigned int NeuralNetworkTrainer::trainNetwork()
                                 (*nn_)[nLayer][n].out()));
                     outputError[nLayer].push_back(outErr);
 
-                    updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
+                    updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer - 1], n,
                                     outputError[nLayer]);
                 }
             }
-        }
-        else 
-        {
-            for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
+            else
             {
-                for(size_t nPrev = 0; nPrev < (*nn_)[nLayer+1].size(); ++nPrev)
+                // For the other layers we need to go through all the neurons
+                // in the previous layer for the error calculation
+                for(size_t nPrev = 0; nPrev < (*nn_)[nLayer+ 1].size(); ++nPrev)
                 {
                     if(type_ == Neuron::Type::TYPE_LINEAR)
                     {
-                        err = ( outputError[nLayer+1][nPrev] 
-                                * (*nn_)[nLayer+1][nPrev][n].weight); 
+                        err += (    outputError[nLayer + 1][nPrev] 
+                                    * (*nn_)[nLayer + 1][nPrev][n].weight); 
 
                     }
                     // TYPE_SIGMOID
                     else
                     {
-                        err =   (*nn_)[nLayer][n].out() * 
+                        err +=  (*nn_)[nLayer][n].out() * 
                                 (1 - (*nn_)[nLayer][n].out()) * 
-                                (outputError[nLayer+1][nPrev] 
-                                * (*nn_)[nLayer+1][nPrev][n].weight); 
+                                (outputError[nLayer + 1][nPrev] 
+                                * (*nn_)[nLayer + 1][nPrev][n].weight); 
                     }
-                // Training works (maybe even better) when this is outside the
-                // for loop!?
-                outputError[nLayer].push_back(err);
                 }
-            }
-            for(size_t n = 0; n < (*nn_)[nLayer].size(); ++n)
-            {
-                updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer-1], n,
+                outputError[nLayer].push_back(err);
+                err = 0;
+                updateWeights(  (*nn_)[nLayer], (*nn_)[nLayer - 1], n,
                                 outputError[nLayer]);
             }
         }

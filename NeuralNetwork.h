@@ -74,8 +74,11 @@ class NeuralNetwork
         // Operator [] for accessing the layers of the neural network
         std::vector<Neuron>& operator[](size_t nLayer);
 
-        // Return how many layers the network has
+        // Return how many neurons the network has
         size_t size() const;
+
+        // Return how many layers the network has
+        size_t layers() const;
 
         // Return Type of the neurons in the network
         Neuron::Type getNeuronType() const;

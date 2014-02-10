@@ -453,6 +453,13 @@ std::vector<Neuron>& NeuralNetwork::operator[](size_t nLayer)
 size_t NeuralNetwork::size() const
 {
 
+    return nNeurons_;
+
+}
+
+size_t NeuralNetwork::layers() const
+{
+
     return neurons_.size();
 
 }

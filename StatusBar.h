@@ -21,7 +21,7 @@ class StatusBar
 
         // StatusBar with refresh interval "interval" in milliseconds
         StatusBar(  std::chrono::milliseconds interval = 
-                    std::chrono::duration<unsigned int, std::milli>(100));
+                    (std::chrono::duration<unsigned int, std::milli>(100)));
 
         // Shows or "starts" the StatusBar after is has been
         // constructed and configured
