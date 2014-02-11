@@ -106,6 +106,10 @@ int main(int argc, char *argv[])
         BOOST_LOG_TRIVIAL(info) << "\tLearning rate set to "
                                 << vm["learning_rate"].as<float>();
     }
+    else
+    {
+        BOOST_LOG_TRIVIAL(info) << "\tNumber of threads defaulting to 1";
+    }
     // TODO: network option is too greedy, implement validator
     if(vm.count("network")) 
     {
@@ -176,6 +180,7 @@ int main(int argc, char *argv[])
     for(size_t i = 0; i < vm["iterations"].as<unsigned int>() + 1; ++i)
     {
         nWeights += trainer.trainNetwork();
+        // TODO: add mutex to StatusBar values!
         bar["Iterations "] = std::to_string(i); 
     }
     auto trainingStop = std::chrono::duration_cast<std::chrono::milliseconds>(

@@ -3,6 +3,7 @@
 
 // Compile time configuration options
 
+//#define MULTITHREAD
 #define VERSION                         0
 #define DEFAULT_ITERATIONS              10000
 #define DEFAULT_TRAINING                BACKPROP

@@ -1,6 +1,7 @@
-CC=			clang++
+CC=			g++
 OPTIM=		-O2
-CFLAGS=		$(OPTIM) -Wall -std=c++11
+# Remove -fopenmp if you do not need multithreading
+CFLAGS=		$(OPTIM) -Wall -std=c++11 -fopenmp
 DEP=		-lpthread -lboost_log -DBOOST_LOG_DYN_LINK -lpng \
 			-lboost_program_options
 TEST_DEP=	$(DEP) -lboost_unit_test_framework -DBOOST_TEST_DYN_LINK

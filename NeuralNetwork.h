@@ -42,9 +42,9 @@ class NeuralNetwork
         // returns the total amount of change in output synapses
         float updateState();
 
-        // Updates the weights of the network to newWeight,
+        // Swaps newWeight to weight (=updates networks weights),
         // returns the amount of weights updated
-        unsigned int updateWeights();
+        unsigned int swapWeights();
 
         // Returns number of connections in the network
         unsigned int getConnections() const;

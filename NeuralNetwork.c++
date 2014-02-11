@@ -245,7 +245,7 @@ float NeuralNetwork::updateState()
 
 }
 
-unsigned int NeuralNetwork::updateWeights()
+unsigned int NeuralNetwork::swapWeights()
 {
 
     unsigned int nWeights = 0;
